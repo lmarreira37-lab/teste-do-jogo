@@ -57,7 +57,7 @@ button:hover {
 }
 
 .screen-card {
-  max-width: 980px;
+  max-width: 1100px;
   margin: 30px auto;
   background: white;
   border: 2px solid #333;
@@ -251,9 +251,59 @@ button:hover {
   font-weight: bold;
 }
 
+/* LIVRO DO ALUNO */
+.book-actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin: 20px 0;
+}
+
+.word-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-top: 25px;
+}
+
+.word-item {
+  background: #f8fbff;
+  border: 2px solid #333;
+  border-radius: 14px;
+  padding: 14px;
+  text-align: center;
+}
+
+.word-item .hanzi {
+  font-size: 34px;
+  font-weight: bold;
+}
+
+.word-item .word-pinyin {
+  margin-top: 6px;
+  color: #555;
+  font-weight: bold;
+}
+
+.word-item .word-translation {
+  margin-top: 6px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.word-item .word-emoji {
+  font-size: 28px;
+  margin-top: 6px;
+}
+
 @media (max-width: 900px) {
   .grid {
     grid-template-columns: repeat(4, 1fr);
+  }
+
+  .word-list {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
@@ -286,6 +336,10 @@ button:hover {
   .quiz-translation {
     font-size: 18px;
   }
+
+  .word-list {
+    grid-template-columns: 1fr;
+  }
 }
 </style>
 </head>
@@ -294,25 +348,58 @@ button:hover {
 <!-- MENU PRINCIPAL -->
 <div id="mainMenu" class="screen-card">
   <h1>Mandarim Study Game</h1>
-  <p>Escolha qual jogo você quer jogar</p>
+  <p>Escolha qual área você quer abrir</p>
 
   <div class="option-group">
-    <div class="option-card" onclick="openMemoryMenu()">
-      <h3>🧠 Jogo da Memória</h3>
-      <p>Associe ideograma com pinyin ou tradução + pinyin</p>
-    </div>
-
-    <div class="option-card" onclick="openTypingMenu()">
-      <h3>✍️ Escrever o Pinyin</h3>
-      <p>Veja o ideograma e digite o pinyin correto</p>
-    </div>
+  <div class="option-card" onclick="setGameSource('base'); openMemoryMenu();">
+    <h3>🧠 Jogo da Memória</h3>
+    <p>Associe ideograma com pinyin ou tradução + pinyin</p>
   </div>
+
+  <div class="option-card" onclick="setGameSource('base'); openTypingMenu();">
+    <h3>✍️ Escrever o Pinyin</h3>
+    <p>Veja o ideograma e digite o pinyin correto</p>
+  </div>
+
+  <div class="option-card" onclick="openStudentBook()">
+    <h3>📘 Livro do Aluno</h3>
+    <p>Veja todos os caracteres e jogue com eles</p>
+  </div>
+
+  <div class="option-card" onclick="window.location.href='frases.html'">
+    <h3>🧩 Construção de Frases</h3>
+    <p>Monte frases afirmativas, negativas e transforme frases</p>
+  </div>
+</div>
+
+<!-- LIVRO DO ALUNO -->
+<div id="studentBookScreen" class="screen-card hidden">
+  <h1>📘 Livro do Aluno</h1>
+  <p>Aqui estão todos os caracteres do livro do aluno</p>
+
+  <div class="top-bar">
+    <div class="info-box" id="studentWordCount">Total: 0 palavras</div>
+    <div class="info-box">Fonte: Livro do Aluno</div>
+  </div>
+
+  <div class="book-actions">
+    <button onclick="toggleStudentWordList()">Ver / Ocultar caracteres</button>
+    <button class="success-btn" onclick="openMemoryMenuFromStudent()">Jogo da Memória</button>
+    <button onclick="openTypingMenuFromStudent()">Jogo de Escrita</button>
+    <button class="secondary-btn" onclick="goToMainMenu()">Voltar</button>
+  </div>
+
+  <div id="studentWordList" class="word-list"></div>
 </div>
 
 <!-- MENU MEMÓRIA -->
 <div id="memoryMenu" class="screen-card hidden">
   <h1>Jogo da Memória</h1>
   <p>Escolha o modo de estudo e o nível</p>
+
+  <div class="top-bar">
+    <div class="info-box" id="memorySourceDisplayMenu">Lista: Geral</div>
+  </div>
 
   <div class="menu-section">
     <h2>Modo de estudo</h2>
@@ -350,7 +437,7 @@ button:hover {
   </div>
 
   <div class="top-bar" style="margin-top:25px;">
-    <button class="secondary-btn" onclick="goToMainMenu()">Voltar</button>
+    <button class="secondary-btn" onclick="goBackFromMemoryMenu()">Voltar</button>
     <button class="success-btn" onclick="startMemoryGame()">Começar</button>
   </div>
 </div>
@@ -359,6 +446,10 @@ button:hover {
 <div id="typingMenu" class="screen-card hidden">
   <h1>Escrever o Pinyin</h1>
   <p>Escolha como quer estudar e o nível</p>
+
+  <div class="top-bar">
+    <div class="info-box" id="typingSourceDisplayMenu">Lista: Geral</div>
+  </div>
 
   <div class="menu-section">
     <h2>Modo de pergunta</h2>
@@ -413,7 +504,7 @@ button:hover {
   </div>
 
   <div class="top-bar" style="margin-top:25px;">
-    <button class="secondary-btn" onclick="goToMainMenu()">Voltar</button>
+    <button class="secondary-btn" onclick="goBackFromTypingMenu()">Voltar</button>
     <button class="success-btn" onclick="startTypingGame()">Começar</button>
   </div>
 </div>
@@ -427,6 +518,7 @@ button:hover {
     <div class="info-box" id="memoryPairs">Pares: 0/0</div>
     <div class="info-box" id="memoryLevelDisplay">Nível: -</div>
     <div class="info-box" id="memoryModeDisplay">Modo: -</div>
+    <div class="info-box" id="memorySourceDisplayGame">Lista: -</div>
   </div>
 
   <div class="top-bar">
@@ -447,6 +539,7 @@ button:hover {
     <div class="info-box" id="typingLevelDisplay">Nível: -</div>
     <div class="info-box" id="typingModeDisplay">Modo: -</div>
     <div class="info-box" id="typingAccentDisplay">Resposta: -</div>
+    <div class="info-box" id="typingSourceDisplayGame">Lista: -</div>
   </div>
 
   <div class="top-bar">
@@ -482,6 +575,7 @@ button:hover {
 </div>
 
 <script>
+/* LISTA GERAL */
 const baseData = [
   { ideogram:'爱',pinyin:'ài',translation:'amor',img:'❤️'},
   { ideogram:'八',pinyin:'bā',translation:'oito',img:'8️⃣'},
@@ -515,8 +609,185 @@ const baseData = [
   { ideogram:'分钟',pinyin:'fēnzhōng',translation:'minuto',img:'⏱️'}
 ];
 
+/* LIVRO DO ALUNO - LISTA ANTIGA */
+const palavrasAntigas = [
+  { hanzi: "您", pinyin: "nín", traducao: "você (formal)", emoji: "🙋‍♂️" },
+  { hanzi: "好", pinyin: "hǎo", traducao: "bom", emoji: "👍" },
+  { hanzi: "贵姓", pinyin: "guìxìng", traducao: "qual é o seu sobrenome?", emoji: "❓" },
+  { hanzi: "姓", pinyin: "xìng", traducao: "sobrenome", emoji: "📝" },
+  { hanzi: "我", pinyin: "wǒ", traducao: "eu", emoji: "🙋" },
+  { hanzi: "呢", pinyin: "ne", traducao: "partícula interrogativa", emoji: "❔" },
+  { hanzi: "是", pinyin: "shì", traducao: "ser", emoji: "✔️" },
+  { hanzi: "人", pinyin: "rén", traducao: "pessoa", emoji: "🧍" },
+  { hanzi: "吗", pinyin: "ma", traducao: "partícula de pergunta", emoji: "❓" },
+  { hanzi: "不", pinyin: "bù", traducao: "não", emoji: "❌" },
+  { hanzi: "同学", pinyin: "tóngxué", traducao: "colega", emoji: "👥" },
+  { hanzi: "们", pinyin: "men", traducao: "plural", emoji: "👫" },
+  { hanzi: "老师", pinyin: "lǎoshī", traducao: "professor", emoji: "👨‍🏫" },
+  { hanzi: "叫", pinyin: "jiào", traducao: "chamar", emoji: "📣" },
+  { hanzi: "你", pinyin: "nǐ", traducao: "você", emoji: "👉" },
+  { hanzi: "什么", pinyin: "shénme", traducao: "o que", emoji: "❓" },
+  { hanzi: "名字", pinyin: "míngzi", traducao: "nome", emoji: "🏷️" },
+  { hanzi: "哪国人", pinyin: "nǎ guó rén", traducao: "de qual país?", emoji: "🌍" },
+  { hanzi: "哪", pinyin: "nǎ", traducao: "qual", emoji: "❓" },
+  { hanzi: "国", pinyin: "guó", traducao: "país", emoji: "🏳️" },
+  { hanzi: "也", pinyin: "yě", traducao: "também", emoji: "➕" },
+  { hanzi: "说", pinyin: "shuō", traducao: "falar", emoji: "🗣️" },
+  { hanzi: "葡萄牙语", pinyin: "pútaoyáyǔ", traducao: "português", emoji: "🇧🇷" },
+  { hanzi: "还是", pinyin: "háishì", traducao: "ou", emoji: "🔀" },
+  { hanzi: "法语", pinyin: "fǎyǔ", traducao: "francês", emoji: "🇫🇷" },
+  { hanzi: "都", pinyin: "dōu", traducao: "todos", emoji: "📊" },
+  { hanzi: "只", pinyin: "zhǐ", traducao: "apenas", emoji: "☝️" },
+  { hanzi: "汉语", pinyin: "hànyǔ", traducao: "chinês", emoji: "🇨🇳" },
+  { hanzi: "他", pinyin: "tā", traducao: "ele", emoji: "👨" },
+  { hanzi: "她", pinyin: "tā", traducao: "ela", emoji: "👩" }
+];
+
+/* LIVRO DO ALUNO - LISTA NOVA */
+const palavrasNovas = [
+  { hanzi: "中学", pinyin: "zhōngxué", traducao: "escola secundária", emoji: "🏫" },
+  { hanzi: "小学", pinyin: "xiǎoxué", traducao: "escola primária", emoji: "🏫" },
+  { hanzi: "电脑", pinyin: "diànnǎo", traducao: "computador", emoji: "💻" },
+  { hanzi: "饮料", pinyin: "yǐnliào", traducao: "bebida", emoji: "🥤" },
+  { hanzi: "水", pinyin: "shuǐ", traducao: "água", emoji: "💧" },
+  { hanzi: "橙汁", pinyin: "chéngzhī", traducao: "suco de laranja", emoji: "🍊" },
+  { hanzi: "可口可乐", pinyin: "kěkǒukělè", traducao: "coca-cola", emoji: "🥤" },
+  { hanzi: "咖啡", pinyin: "kāfēi", traducao: "café", emoji: "☕" },
+  { hanzi: "亚洲", pinyin: "Yàzhōu", traducao: "Ásia", emoji: "🌏" },
+  { hanzi: "欧洲", pinyin: "Ōuzhōu", traducao: "Europa", emoji: "🌍" },
+  { hanzi: "美洲", pinyin: "Měizhōu", traducao: "América", emoji: "🌎" },
+  { hanzi: "大洋洲", pinyin: "Dàyángzhōu", traducao: "Oceania", emoji: "🌊" },
+  { hanzi: "非洲", pinyin: "Fēizhōu", traducao: "África", emoji: "🌍" },
+  { hanzi: "西方", pinyin: "xīfāng", traducao: "ocidente", emoji: "🌇" },
+  { hanzi: "东方", pinyin: "dōngfāng", traducao: "oriente", emoji: "🌅" },
+  { hanzi: "地方", pinyin: "dìfang", traducao: "lugar", emoji: "📍" },
+  { hanzi: "个", pinyin: "gè", traducao: "classificador", emoji: "🔢" },
+  { hanzi: "这儿", pinyin: "zhèr", traducao: "aqui", emoji: "📌" },
+  { hanzi: "家", pinyin: "jiā", traducao: "casa/família", emoji: "🏠" },
+  { hanzi: "有", pinyin: "yǒu", traducao: "ter", emoji: "✔️" },
+  { hanzi: "几", pinyin: "jǐ", traducao: "quantos", emoji: "❓" },
+  { hanzi: "口", pinyin: "kǒu", traducao: "classificador pessoas", emoji: "👥" },
+  { hanzi: "爸爸", pinyin: "bàba", traducao: "pai", emoji: "👨" },
+  { hanzi: "妈妈", pinyin: "māma", traducao: "mãe", emoji: "👩" },
+  { hanzi: "和", pinyin: "hé", traducao: "e", emoji: "➕" },
+  { hanzi: "太太", pinyin: "tàitai", traducao: "esposa", emoji: "👩" },
+  { hanzi: "孩子", pinyin: "háizi", traducao: "criança", emoji: "👶" },
+  { hanzi: "男孩儿", pinyin: "nánháir", traducao: "menino", emoji: "👦" },
+  { hanzi: "女孩儿", pinyin: "nǚháir", traducao: "menina", emoji: "👧" },
+  { hanzi: "多大", pinyin: "duō dà", traducao: "quantos anos", emoji: "🎂" },
+  { hanzi: "两", pinyin: "liǎng", traducao: "dois", emoji: "2️⃣" },
+  { hanzi: "岁", pinyin: "suì", traducao: "anos (idade)", emoji: "🎂" },
+  { hanzi: "可爱", pinyin: "kě’ài", traducao: "fofo", emoji: "🥰" },
+  { hanzi: "吧", pinyin: "ba", traducao: "partícula", emoji: "💬" },
+  { hanzi: "学校", pinyin: "xuéxiào", traducao: "escola", emoji: "🏫" },
+  { hanzi: "多少", pinyin: "duōshao", traducao: "quantos", emoji: "❓" },
+  { hanzi: "学生", pinyin: "xuéshēng", traducao: "aluno", emoji: "🎓" },
+  { hanzi: "想", pinyin: "xiǎng", traducao: "pensar", emoji: "🤔" },
+  { hanzi: "大概", pinyin: "dàgài", traducao: "aproximadamente", emoji: "📊" },
+  { hanzi: "万", pinyin: "wàn", traducao: "dez mil", emoji: "🔟" },
+  { hanzi: "没有", pinyin: "méiyǒu", traducao: "não ter", emoji: "❌" },
+  { hanzi: "多", pinyin: "duō", traducao: "muito", emoji: "📈" },
+  { hanzi: "千", pinyin: "qiān", traducao: "mil", emoji: "💯" },
+  { hanzi: "去", pinyin: "qù", traducao: "ir", emoji: "➡️" },
+  { hanzi: "为什么", pinyin: "wèi shénme", traducao: "por quê", emoji: "❓" },
+  { hanzi: "为", pinyin: "wèi", traducao: "para", emoji: "➡️" },
+  { hanzi: "分公司", pinyin: "fēn gōngsī", traducao: "filial", emoji: "🏢" },
+  { hanzi: "老板", pinyin: "lǎobǎn", traducao: "chefe", emoji: "👔" },
+  { hanzi: "让", pinyin: "ràng", traducao: "deixar/permitir", emoji: "✔️" },
+  { hanzi: "那儿", pinyin: "nàr", traducao: "lá", emoji: "📍" },
+  { hanzi: "百", pinyin: "bǎi", traducao: "cem", emoji: "💯" },
+  { hanzi: "少", pinyin: "shǎo", traducao: "pouco", emoji: "📉" },
+  { hanzi: "因为", pinyin: "yīnwèi", traducao: "porque", emoji: "🔗" }
+];
+
+/* NORMALIZAÇÃO */
+function normalizeWord(item) {
+  return {
+    ideogram: item.ideogram || item.hanzi || '',
+    pinyin: item.pinyin || '',
+    translation: item.translation || item.traducao || '',
+    img: item.img || item.emoji || '🈶'
+  };
+}
+
+const normalizedBaseData = baseData.map(normalizeWord);
+const normalizedStudentData = [...palavrasAntigas, ...palavrasNovas].map(normalizeWord);
+
+/* CONTROLE DE FONTE */
+let currentSource = 'base';
+
+function getCurrentData() {
+  return currentSource === 'student' ? normalizedStudentData : normalizedBaseData;
+}
+
+function getCurrentSourceName() {
+  return currentSource === 'student' ? 'Livro do Aluno' : 'Geral';
+}
+
+function setGameSource(source) {
+  currentSource = source;
+  updateSourceDisplays();
+  updateLevelTexts();
+}
+
+function getMemoryLevelLimit() {
+  if (currentSource === 'student') {
+    if (memoryLevelName === 'Fácil') return 28;
+    if (memoryLevelName === 'Médio') return 56;
+    return 83;
+  }
+
+  if (memoryLevelName === 'Fácil') return 10;
+  if (memoryLevelName === 'Médio') return 20;
+  return 30;
+}
+
+function getTypingLevelLimit() {
+  if (currentSource === 'student') {
+    if (typingLevelName === 'Fácil') return 28;
+    if (typingLevelName === 'Médio') return 56;
+    return 83;
+  }
+
+  if (typingLevelName === 'Fácil') return 10;
+  if (typingLevelName === 'Médio') return 20;
+  return 30;
+}
+
+function updateLevelTexts() {
+  const memoryCards = document.querySelectorAll('.memory-level-options .option-card p');
+  const typingCards = document.querySelectorAll('.typing-level-options .option-card p');
+
+  if (currentSource === 'student') {
+    memoryCards[0].innerText = '28 pares';
+    memoryCards[1].innerText = '56 pares';
+    memoryCards[2].innerText = '83 pares';
+
+    typingCards[0].innerText = '28 palavras';
+    typingCards[1].innerText = '56 palavras';
+    typingCards[2].innerText = '83 palavras';
+  } else {
+    memoryCards[0].innerText = '10 pares';
+    memoryCards[1].innerText = '20 pares';
+    memoryCards[2].innerText = '30 pares';
+
+    typingCards[0].innerText = '10 palavras';
+    typingCards[1].innerText = '20 palavras';
+    typingCards[2].innerText = '30 palavras';
+  }
+}
+
+function updateSourceDisplays() {
+  const sourceName = getCurrentSourceName();
+  document.getElementById('memorySourceDisplayMenu').innerText = `Lista: ${sourceName}`;
+  document.getElementById('typingSourceDisplayMenu').innerText = `Lista: ${sourceName}`;
+  document.getElementById('memorySourceDisplayGame').innerText = `Lista: ${sourceName}`;
+  document.getElementById('typingSourceDisplayGame').innerText = `Lista: ${sourceName}`;
+}
+
 /* TELAS */
 const mainMenu = document.getElementById('mainMenu');
+const studentBookScreen = document.getElementById('studentBookScreen');
 const memoryMenu = document.getElementById('memoryMenu');
 const typingMenu = document.getElementById('typingMenu');
 const memoryGameScreen = document.getElementById('memoryGameScreen');
@@ -524,6 +795,7 @@ const typingGameScreen = document.getElementById('typingGameScreen');
 
 function hideAllScreens() {
   mainMenu.classList.add('hidden');
+  studentBookScreen.classList.add('hidden');
   memoryMenu.classList.add('hidden');
   typingMenu.classList.add('hidden');
   memoryGameScreen.classList.add('hidden');
@@ -536,14 +808,78 @@ function goToMainMenu() {
   mainMenu.classList.remove('hidden');
 }
 
+function openStudentBook() {
+  setGameSource('student');
+  renderStudentWordList();
+  hideAllScreens();
+  studentBookScreen.classList.remove('hidden');
+}
+
+function toggleStudentWordList() {
+  const list = document.getElementById('studentWordList');
+  list.classList.toggle('hidden');
+}
+
+function renderStudentWordList() {
+  const list = document.getElementById('studentWordList');
+  list.innerHTML = '';
+  document.getElementById('studentWordCount').innerText = `Total: ${normalizedStudentData.length} palavras`;
+
+  normalizedStudentData.forEach(item => {
+    const div = document.createElement('div');
+    div.className = 'word-item';
+    div.innerHTML = `
+      <div class="hanzi">${item.ideogram}</div>
+      <div class="word-pinyin">${item.pinyin}</div>
+      <div class="word-translation">${item.translation}</div>
+      <div class="word-emoji">${item.img}</div>
+    `;
+    list.appendChild(div);
+  });
+
+  list.classList.remove('hidden');
+}
+
 function openMemoryMenu() {
+  updateSourceDisplays();
+  updateLevelTexts();
   hideAllScreens();
   memoryMenu.classList.remove('hidden');
 }
 
 function openTypingMenu() {
+  updateSourceDisplays();
+  updateLevelTexts();
   hideAllScreens();
   typingMenu.classList.remove('hidden');
+}
+
+function openMemoryMenuFromStudent() {
+  setGameSource('student');
+  openMemoryMenu();
+}
+
+function openTypingMenuFromStudent() {
+  setGameSource('student');
+  openTypingMenu();
+}
+
+function goBackFromMemoryMenu() {
+  hideAllScreens();
+  if (currentSource === 'student') {
+    studentBookScreen.classList.remove('hidden');
+  } else {
+    mainMenu.classList.remove('hidden');
+  }
+}
+
+function goBackFromTypingMenu() {
+  hideAllScreens();
+  if (currentSource === 'student') {
+    studentBookScreen.classList.remove('hidden');
+  } else {
+    mainMenu.classList.remove('hidden');
+  }
 }
 
 /* =========================
@@ -670,14 +1006,15 @@ function createMemoryCard(card, i) {
       memorySecond.classList.add('matched');
       memoryPairsCount++;
 
-      document.getElementById('memoryPairs').innerText = `Pares: ${memoryPairsCount}/${memoryLevel}`;
+      document.getElementById('memoryPairs').innerText =
+        `Pares: ${memoryPairsCount}/${Math.min(getMemoryLevelLimit(), getCurrentData().length)}`;
 
       resetMemorySelection();
 
-      if (memoryPairsCount === memoryLevel) {
+      if (memoryPairsCount === Math.min(getMemoryLevelLimit(), getCurrentData().length)) {
         clearInterval(memoryInterval);
         setTimeout(() => {
-          alert(`🎉 Você ganhou no nível ${memoryLevelName} (${memoryModeName}) em ${memoryTime} segundos!`);
+          alert(`🎉 Você ganhou no nível ${memoryLevelName} (${memoryModeName}) usando a lista ${getCurrentSourceName()} em ${memoryTime} segundos!`);
         }, 300);
       }
     } else {
@@ -699,11 +1036,14 @@ function initMemoryGame() {
   memorySecond = null;
   memoryLock = false;
 
-  const selectedData = baseData.slice(0, memoryLevel);
+  const currentData = getCurrentData();
+  const levelLimit = Math.min(getMemoryLevelLimit(), currentData.length);
+  const selectedData = currentData.slice(0, levelLimit);
 
   document.getElementById('memoryPairs').innerText = `Pares: 0/${selectedData.length}`;
   document.getElementById('memoryLevelDisplay').innerText = `Nível: ${memoryLevelName}`;
   document.getElementById('memoryModeDisplay').innerText = `Modo: ${memoryModeName}`;
+  document.getElementById('memorySourceDisplayGame').innerText = `Lista: ${getCurrentSourceName()}`;
 
   memoryCards = [];
 
@@ -789,7 +1129,10 @@ function backToTypingMenu() {
 }
 
 function restartTypingGame() {
-  typingQuestions = shuffleArray([...baseData.slice(0, typingLevel)]);
+  const currentData = getCurrentData();
+  const levelLimit = Math.min(getTypingLevelLimit(), currentData.length);
+
+  typingQuestions = shuffleArray([...currentData.slice(0, levelLimit)]);
   typingIndex = 0;
   typingScore = 0;
   typingAnswered = false;
@@ -799,6 +1142,7 @@ function restartTypingGame() {
   document.getElementById('typingModeDisplay').innerText = `Modo: ${typingModeName}`;
   document.getElementById('typingAccentDisplay').innerText = `Resposta: ${typingAccentModeName}`;
   document.getElementById('typingScore').innerText = `Acertos: ${typingScore}`;
+  document.getElementById('typingSourceDisplayGame').innerText = `Lista: ${getCurrentSourceName()}`;
 
   loadTypingQuestion();
 }
@@ -946,6 +1290,10 @@ function handleTypingEnter(event) {
     }
   }
 }
+
+/* INICIALIZAÇÃO */
+updateSourceDisplays();
+updateLevelTexts();
 </script>
 
 </body>
