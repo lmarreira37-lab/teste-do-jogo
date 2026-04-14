@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Construção de Frases - Mandarim</title>
+  <title>Construção de Frases - Tradução PT → Chinês</title>
 
   <style>
     body {
@@ -127,7 +127,7 @@
     }
 
     .challenge-title {
-      font-size: 22px;
+      font-size: 24px;
       font-weight: bold;
       margin-bottom: 10px;
       text-align: center;
@@ -137,34 +137,31 @@
       text-align: center;
       margin-bottom: 20px;
       color: #555;
+      font-size: 16px;
+      line-height: 1.6;
     }
 
-    .model-box {
-      max-width: 700px;
+    .prompt-box {
+      max-width: 760px;
       margin: 0 auto 20px;
       background: #fff;
       border: 2px dashed #666;
       border-radius: 12px;
-      padding: 16px;
+      padding: 18px;
       text-align: center;
     }
 
-    .model-hanzi {
-      font-size: 34px;
+    .prompt-label {
+      font-size: 14px;
       font-weight: bold;
+      color: #555;
       margin-bottom: 8px;
     }
 
-    .model-pinyin {
-      font-size: 18px;
-      color: #444;
+    .prompt-text {
+      font-size: 24px;
       font-weight: bold;
-      margin-bottom: 6px;
-    }
-
-    .model-translation {
-      font-size: 16px;
-      color: #333;
+      line-height: 1.5;
     }
 
     .drop-zone {
@@ -182,7 +179,7 @@
     }
 
     .word-bank {
-      min-height: 110px;
+      min-height: 120px;
       border: 2px solid #333;
       border-radius: 14px;
       background: #fff;
@@ -212,7 +209,7 @@
     }
 
     .word-chip.used {
-      opacity: 0.4;
+      opacity: 0.35;
       pointer-events: none;
     }
 
@@ -225,7 +222,7 @@
     }
 
     .feedback-box {
-      max-width: 760px;
+      max-width: 820px;
       margin: 20px auto 0;
       background: #fff;
       border: 2px solid #333;
@@ -243,7 +240,8 @@
     .feedback-line {
       margin: 8px 0;
       font-size: 16px;
-      line-height: 1.5;
+      line-height: 1.6;
+      word-break: break-word;
     }
 
     .correct {
@@ -273,8 +271,8 @@
         font-size: 18px;
       }
 
-      .model-hanzi {
-        font-size: 28px;
+      .prompt-text {
+        font-size: 20px;
       }
     }
   </style>
@@ -284,44 +282,27 @@
   <!-- MENU -->
   <div id="menuScreen" class="screen-card">
     <h1>Construção de Frases</h1>
-    <p>Escolha o modo de treino</p>
-
-    <div class="menu-section">
-      <h2>Modo</h2>
-      <div class="option-group mode-options">
-        <div class="option-card selected" onclick="selectMode('affirmative', this)">
-          <h3>✅ Afirmativa</h3>
-          <p>Monte uma frase afirmativa</p>
-        </div>
-
-        <div class="option-card" onclick="selectMode('negative', this)">
-          <h3>❌ Negativa</h3>
-          <p>Monte uma frase negativa</p>
-        </div>
-
-        <div class="option-card" onclick="selectMode('transform', this)">
-          <h3>🔄 Transformar em negativa</h3>
-          <p>Veja a afirmativa e monte a negativa</p>
-        </div>
-      </div>
-    </div>
+    <p>Traduza frases do português para o chinês</p>
 
     <div class="menu-section">
       <h2>Nível</h2>
       <div class="option-group level-options">
         <div class="option-card selected" onclick="selectLevel('easy', this)">
           <h3>🟢 Fácil</h3>
-          <p>Estruturas mais curtas</p>
+          <p>Frases mais curtas</p>
+          <p>Sem muitos distratores</p>
         </div>
 
         <div class="option-card" onclick="selectLevel('medium', this)">
           <h3>🟡 Médio</h3>
-          <p>Mais combinações</p>
+          <p>Mais palavras</p>
+          <p>Com distratores</p>
         </div>
 
         <div class="option-card" onclick="selectLevel('hard', this)">
           <h3>🔴 Difícil</h3>
-          <p>Mais variedade e distratores</p>
+          <p>Frases maiores</p>
+          <p>Mais distratores e variedade</p>
         </div>
       </div>
     </div>
@@ -337,7 +318,7 @@
     <h1>Construção de Frases</h1>
 
     <div class="top-bar">
-      <div class="info-box" id="modeDisplay">Modo: -</div>
+      <div class="info-box" id="modeDisplay">Modo: Tradução PT → Chinês</div>
       <div class="info-box" id="levelDisplay">Nível: -</div>
       <div class="info-box" id="roundDisplay">Rodada: 1</div>
     </div>
@@ -349,16 +330,17 @@
     </div>
 
     <div class="sentence-box">
-      <div class="challenge-title" id="challengeTitle">Monte a frase</div>
-      <div class="challenge-subtitle" id="challengeSubtitle">Clique nas palavras para montar a frase correta</div>
-
-      <div id="modelBox" class="model-box hidden">
-        <div class="model-hanzi" id="modelHanzi"></div>
-        <div class="model-pinyin" id="modelPinyin"></div>
-        <div class="model-translation" id="modelTranslation"></div>
+      <div class="challenge-title">Traduza para o chinês</div>
+      <div class="challenge-subtitle">
+        Monte a frase clicando nas palavras disponíveis.
       </div>
 
-      <h3>Sua frase</h3>
+      <div class="prompt-box">
+        <div class="prompt-label">Frase em português</div>
+        <div class="prompt-text" id="promptText">Você fala Inglês ou Português?</div>
+      </div>
+
+      <h3>Sua frase em chinês</h3>
       <div id="dropZone" class="drop-zone"></div>
 
       <h3>Palavras disponíveis</h3>
@@ -371,7 +353,7 @@
       </div>
 
       <div class="small-note">
-        As frases são geradas com palavras já existentes no seu jogo.
+        As frases são sorteadas para não ficar automático.
       </div>
     </div>
 
@@ -391,113 +373,130 @@
 
   <script>
     /* =========================
-       BASE DE PALAVRAS
+       DICIONÁRIO DE TOKENS
     ========================= */
-    const words = {
-      subjects: [
-        { hanzi: '我', pinyin: 'wǒ', pt: 'eu' },
-        { hanzi: '你', pinyin: 'nǐ', pt: 'você' },
-        { hanzi: '他', pinyin: 'tā', pt: 'ele' },
-        { hanzi: '她', pinyin: 'tā', pt: 'ela' },
-        { hanzi: '爸爸', pinyin: 'bàba', pt: 'papai' },
-        { hanzi: '妈妈', pinyin: 'māma', pt: 'mamãe' },
-        { hanzi: '儿子', pinyin: 'érzi', pt: 'filho' }
-      ],
-
-      foodDrinkVerbs: [
-        { hanzi: '吃', pinyin: 'chī', pt: 'comer' },
-        { hanzi: '喝', pinyin: 'hē', pt: 'beber' }
-      ],
-
-      lookReadVerbs: [
-        { hanzi: '看', pinyin: 'kàn', pt: 'ver' },
-        { hanzi: '读', pinyin: 'dú', pt: 'ler' }
-      ],
-
-      moveVerbs: [
-        { hanzi: '去', pinyin: 'qù', pt: 'ir' }
-      ],
-
-      phoneVerbs: [
-        { hanzi: '打电话', pinyin: 'dǎ diànhuà', pt: 'telefonar' }
-      ],
-
-      foodDrinkObjects: {
-        '吃': [
-          { hanzi: '菜', pinyin: 'cài', pt: 'comida' }
-        ],
-        '喝': [
-          { hanzi: '茶', pinyin: 'chá', pt: 'chá' },
-          { hanzi: '咖啡', pinyin: 'kāfēi', pt: 'café' },
-          { hanzi: '水', pinyin: 'shuǐ', pt: 'água' },
-          { hanzi: '橙汁', pinyin: 'chéngzhī', pt: 'suco de laranja' },
-          { hanzi: '可口可乐', pinyin: 'kěkǒukělè', pt: 'coca-cola' }
-        ]
-      },
-
-      lookReadObjects: {
-        '看': [
-          { hanzi: '电影', pinyin: 'diànyǐng', pt: 'filme' },
-          { hanzi: '电视', pinyin: 'diànshì', pt: 'TV' }
-        ],
-        '读': [
-          { hanzi: '本', pinyin: 'běn', pt: 'livro' },
-          { hanzi: '汉语', pinyin: 'hànyǔ', pt: 'chinês' },
-          { hanzi: '法语', pinyin: 'fǎyǔ', pt: 'francês' },
-          { hanzi: '葡萄牙语', pinyin: 'pútaoyáyǔ', pt: 'português' }
-        ]
-      },
-
-      places: [
-        { hanzi: '北京', pinyin: 'běijīng', pt: 'Pequim' },
-        { hanzi: '酒店', pinyin: 'jiǔdiàn', pt: 'hotel' },
-        { hanzi: '学校', pinyin: 'xuéxiào', pt: 'escola' },
-        { hanzi: '中学', pinyin: 'zhōngxué', pt: 'escola secundária' },
-        { hanzi: '小学', pinyin: 'xiǎoxué', pt: 'escola primária' },
-        { hanzi: '这儿', pinyin: 'zhèr', pt: 'aqui' },
-        { hanzi: '那儿', pinyin: 'nàr', pt: 'lá' }
-      ],
-
-      negativeWord: { hanzi: '不', pinyin: 'bù', pt: 'não' },
-
-      distractors: [
-        { hanzi: '都', pinyin: 'dōu', pt: 'todos' },
-        { hanzi: '也', pinyin: 'yě', pt: 'também' },
-        { hanzi: '多少', pinyin: 'duōshao', pt: 'quanto' },
-        { hanzi: '大', pinyin: 'dà', pt: 'grande' },
-        { hanzi: '点', pinyin: 'diǎn', pt: 'hora' },
-        { hanzi: '电脑', pinyin: 'diànnǎo', pt: 'computador' }
-      ]
+    const tokenDictionary = {
+      '我': { hanzi: '我', pinyin: 'wǒ', pt: 'eu' },
+      '你': { hanzi: '你', pinyin: 'nǐ', pt: 'você' },
+      '他': { hanzi: '他', pinyin: 'tā', pt: 'ele' },
+      '她': { hanzi: '她', pinyin: 'tā', pt: 'ela' },
+      '是': { hanzi: '是', pinyin: 'shì', pt: 'ser' },
+      '不': { hanzi: '不', pinyin: 'bù', pt: 'não' },
+      '吗': { hanzi: '吗', pinyin: 'ma', pt: 'partícula de pergunta' },
+      '姓': { hanzi: '姓', pinyin: 'xìng', pt: 'sobrenome' },
+      '王': { hanzi: '王', pinyin: 'Wáng', pt: 'Wang' },
+      '张': { hanzi: '张', pinyin: 'Zhāng', pt: 'Zhang' },
+      '说': { hanzi: '说', pinyin: 'shuō', pt: 'falar' },
+      '英语': { hanzi: '英语', pinyin: 'Yīngyǔ', pt: 'inglês' },
+      '葡萄牙语': { hanzi: '葡萄牙语', pinyin: 'Pútáoyáyǔ', pt: 'português' },
+      '还是': { hanzi: '还是', pinyin: 'háishì', pt: 'ou' },
+      '中国人': { hanzi: '中国人', pinyin: 'Zhōngguórén', pt: 'chinês' },
+      '叫': { hanzi: '叫', pinyin: 'jiào', pt: 'chamar' },
+      '什么': { hanzi: '什么', pinyin: 'shénme', pt: 'o que' },
+      '名字': { hanzi: '名字', pinyin: 'míngzi', pt: 'nome' },
+      '只': { hanzi: '只', pinyin: 'zhǐ', pt: 'apenas' },
+      '汉语': { hanzi: '汉语', pinyin: 'Hànyǔ', pt: 'chinês' },
+      '老师': { hanzi: '老师', pinyin: 'lǎoshī', pt: 'professor' },
+      '也': { hanzi: '也', pinyin: 'yě', pt: 'também' },
+      '哪国人': { hanzi: '哪国人', pinyin: 'nǎ guó rén', pt: 'de qual país' },
+      '好': { hanzi: '好', pinyin: 'hǎo', pt: 'bem' },
+      '同学': { hanzi: '同学', pinyin: 'tóngxué', pt: 'colega' },
+      '呢': { hanzi: '呢', pinyin: 'ne', pt: 'partícula interrogativa' },
+      '都': { hanzi: '都', pinyin: 'dōu', pt: 'todos' },
+      '和': { hanzi: '和', pinyin: 'hé', pt: 'e' },
+      '北京': { hanzi: '北京', pinyin: 'Běijīng', pt: 'Pequim' }
     };
+
+    /* =========================
+       FRASES DE TRADUÇÃO
+    ========================= */
+    const translationSentences = [
+      {
+        pt: 'O meu sobrenome não é Wang, o meu sobrenome é Zhang.',
+        tokens: ['我', '不', '姓', '王', '我', '姓', '张'],
+        explanation: 'Em chinês, 不 vem antes do verbo. Aqui, 姓 é o verbo “ter sobrenome”.'
+      },
+      {
+        pt: 'Você fala Inglês ou Português?',
+        tokens: ['你', '说', '英语', '还是', '葡萄牙语'],
+        explanation: 'Quando a ideia é “A ou B”, o 还是 costuma aparecer entre as duas opções.'
+      },
+      {
+        pt: 'Você é chinês?',
+        tokens: ['你', '是', '中国人', '吗'],
+        explanation: 'Em perguntas simples com resposta sim ou não, 吗 fica no fim da frase.'
+      },
+      {
+        pt: 'Como se chama?',
+        tokens: ['你', '叫', '什么', '名字'],
+        explanation: 'A estrutura aqui é “você + chamar + o quê + nome”.'
+      },
+      {
+        pt: 'Eu só falo Chinês.',
+        tokens: ['我', '只', '说', '汉语'],
+        explanation: '只 significa “apenas/só” e vem antes do verbo.'
+      },
+      {
+        pt: 'Ele fala Português?',
+        tokens: ['他', '说', '葡萄牙语', '吗'],
+        explanation: 'Perguntas simples com 吗 costumam terminar com essa partícula.'
+      },
+      {
+        pt: 'Ela também fala Chinês.',
+        tokens: ['她', '也', '说', '汉语'],
+        explanation: '也 significa “também” e costuma vir antes do verbo principal.'
+      },
+      {
+        pt: 'Você é professor?',
+        tokens: ['你', '是', '老师', '吗'],
+        explanation: 'A estrutura é direta: sujeito + 是 + profissão + 吗.'
+      },
+      {
+        pt: 'Eu sou chinês.',
+        tokens: ['我', '是', '中国人'],
+        explanation: 'Frase afirmativa simples: sujeito + 是 + complemento.'
+      },
+      {
+        pt: 'Ele não fala Inglês.',
+        tokens: ['他', '不', '说', '英语'],
+        explanation: 'Na negativa simples, 不 aparece antes do verbo 说.'
+      },
+      {
+        pt: 'Qual é o seu nome?',
+        tokens: ['你', '叫', '什么', '名字'],
+        explanation: 'É a mesma estrutura de “Como se chama?” no treino inicial.'
+      },
+      {
+        pt: 'Ela é de qual país?',
+        tokens: ['她', '是', '哪国人'],
+        explanation: '哪国人 significa “de qual país / qual nacionalidade”.'
+      }
+    ];
+
+    /* =========================
+       DISTRACTORES
+    ========================= */
+    const distractors = [
+      '老师', '也', '都', '同学', '呢', '和', '北京', '好', '你', '我', '他', '她'
+    ];
 
     /* =========================
        ESTADO
     ========================= */
-    let selectedMode = 'affirmative';
-    let selectedModeName = 'Afirmativa';
     let selectedLevel = 'easy';
     let selectedLevelName = 'Fácil';
 
     let currentRound = 1;
     let currentQuestion = null;
-    let usedSentenceKeys = [];
-
+    let usedQuestionIndexes = [];
     let playerAnswer = [];
 
     const menuScreen = document.getElementById('menuScreen');
     const gameScreen = document.getElementById('gameScreen');
 
-    const modeDisplay = document.getElementById('modeDisplay');
     const levelDisplay = document.getElementById('levelDisplay');
     const roundDisplay = document.getElementById('roundDisplay');
-
-    const challengeTitle = document.getElementById('challengeTitle');
-    const challengeSubtitle = document.getElementById('challengeSubtitle');
-
-    const modelBox = document.getElementById('modelBox');
-    const modelHanzi = document.getElementById('modelHanzi');
-    const modelPinyin = document.getElementById('modelPinyin');
-    const modelTranslation = document.getElementById('modelTranslation');
+    const promptText = document.getElementById('promptText');
 
     const dropZone = document.getElementById('dropZone');
     const wordBank = document.getElementById('wordBank');
@@ -529,52 +528,56 @@
       return true;
     }
 
-    function sentenceToKey(tokens) {
-      return tokens.map(t => t.hanzi).join('|');
+    function tokensToHanzi(tokens) {
+      return tokens.map(t => t.hanzi).join('');
     }
 
-    function buildSentenceInfo(tokens) {
-      return {
-        hanzi: tokens.map(t => t.hanzi).join(''),
-        pinyin: tokens.map(t => t.pinyin).join(' '),
-        translation: tokens.map(t => t.pt).join(' ')
-      };
+    function tokensToPinyin(tokens) {
+      return tokens.map(t => t.pinyin).join(' ');
     }
 
-    function addDistractors(baseTokens) {
-      let count = 0;
+    function tokensToPortuguese(tokens) {
+      return tokens.map(t => t.pt).join(' ');
+    }
 
-      if (selectedLevel === 'medium') count = 1;
-      if (selectedLevel === 'hard') count = 2;
+    function uniqueRecentPush(index) {
+      usedQuestionIndexes.push(index);
+      if (usedQuestionIndexes.length > 8) {
+        usedQuestionIndexes.shift();
+      }
+    }
 
-      if (count === 0) return shuffleArray(baseTokens);
+    function getDistractorCount() {
+      if (selectedLevel === 'easy') return 0;
+      if (selectedLevel === 'medium') return 2;
+      return 4;
+    }
 
-      const extras = shuffleArray(words.distractors).slice(0, count);
-      return shuffleArray([...baseTokens, ...extras]);
+    function buildTokenObjects(tokenList) {
+      return tokenList.map(token => ({ ...tokenDictionary[token] }));
+    }
+
+    function buildBankTokens(answerTokenNames) {
+      let bank = buildTokenObjects(answerTokenNames);
+
+      const distractorCount = getDistractorCount();
+      if (distractorCount > 0) {
+        const availableDistractors = distractors.filter(d => !answerTokenNames.includes(d));
+        const chosenDistractors = shuffleArray(availableDistractors).slice(0, distractorCount);
+        bank = [...bank, ...buildTokenObjects(chosenDistractors)];
+      }
+
+      return shuffleArray(bank);
     }
 
     function updateTopBar() {
-      modeDisplay.innerText = `Modo: ${selectedModeName}`;
       levelDisplay.innerText = `Nível: ${selectedLevelName}`;
       roundDisplay.innerText = `Rodada: ${currentRound}`;
     }
 
     /* =========================
-       SELEÇÃO MENU
+       MENU
     ========================= */
-    function selectMode(mode, element) {
-      selectedMode = mode;
-
-      if (mode === 'affirmative') selectedModeName = 'Afirmativa';
-      if (mode === 'negative') selectedModeName = 'Negativa';
-      if (mode === 'transform') selectedModeName = 'Transformar em negativa';
-
-      document.querySelectorAll('.mode-options .option-card').forEach(card => {
-        card.classList.remove('selected');
-      });
-      element.classList.add('selected');
-    }
-
     function selectLevel(level, element) {
       selectedLevel = level;
 
@@ -590,12 +593,12 @@
 
     function startGame() {
       currentRound = 1;
-      usedSentenceKeys = [];
-      hideFeedback();
+      usedQuestionIndexes = [];
       playerAnswer = [];
+      hideFeedback();
+      updateTopBar();
       menuScreen.classList.add('hidden');
       gameScreen.classList.remove('hidden');
-      updateTopBar();
       generateNewRound(true);
     }
 
@@ -605,158 +608,44 @@
     }
 
     /* =========================
-       GERADOR DE FRASES
+       GERAÇÃO DE QUESTÃO
     ========================= */
-    function generateAffirmativeQuestion() {
-      const patternPoolEasy = ['svo', 'svplace'];
-      const patternPoolMedium = ['svo', 'svplace', 'svphone'];
-      const patternPoolHard = ['svo', 'svplace', 'svphone'];
+    function getAvailableQuestionIndexes() {
+      let indexes = translationSentences.map((_, index) => index);
 
-      let patternPool = patternPoolEasy;
-      if (selectedLevel === 'medium') patternPool = patternPoolMedium;
-      if (selectedLevel === 'hard') patternPool = patternPoolHard;
-
-      const pattern = randomItem(patternPool);
-      const subject = randomItem(words.subjects);
-
-      let answerTokens = [];
-      let explanation = 'A ordem básica da frase afirmativa é sujeito + verbo + complemento.';
-
-      if (pattern === 'svo') {
-        const verbGroup = randomItem(['foodDrink', 'lookRead']);
-
-        if (verbGroup === 'foodDrink') {
-          const verb = randomItem(words.foodDrinkVerbs);
-          const object = randomItem(words.foodDrinkObjects[verb.hanzi]);
-          answerTokens = [subject, verb, object];
-        } else {
-          const verb = randomItem(words.lookReadVerbs);
-          const object = randomItem(words.lookReadObjects[verb.hanzi]);
-          answerTokens = [subject, verb, object];
-        }
+      if (selectedLevel === 'easy') {
+        indexes = [2, 3, 4, 8];
       }
 
-      if (pattern === 'svplace') {
-        const verb = randomItem(words.moveVerbs);
-        const place = randomItem(words.places);
-        answerTokens = [subject, verb, place];
+      if (selectedLevel === 'medium') {
+        indexes = [1, 2, 3, 4, 5, 6, 7, 8, 10, 11];
       }
 
-      if (pattern === 'svphone') {
-        const verb = randomItem(words.phoneVerbs);
-        answerTokens = [subject, verb];
-        explanation = 'Nesta frase, a ordem básica continua sendo sujeito + verbo.';
-      }
-
-      return {
-        type: 'affirmative',
-        answerTokens,
-        bankTokens: addDistractors(answerTokens),
-        explanation,
-        promptTitle: 'Monte a frase afirmativa',
-        promptSubtitle: 'Clique nas palavras para formar a frase correta.',
-        model: null
-      };
-    }
-
-    function generateNegativeQuestion() {
-      const patternPoolEasy = ['sbuvo', 'sbuvplace'];
-      const patternPoolMedium = ['sbuvo', 'sbuvplace', 'sbuvphone'];
-      const patternPoolHard = ['sbuvo', 'sbuvplace', 'sbuvphone'];
-
-      let patternPool = patternPoolEasy;
-      if (selectedLevel === 'medium') patternPool = patternPoolMedium;
-      if (selectedLevel === 'hard') patternPool = patternPoolHard;
-
-      const pattern = randomItem(patternPool);
-      const subject = randomItem(words.subjects);
-      const neg = words.negativeWord;
-
-      let answerTokens = [];
-      let explanation = 'Em frases negativas simples, 不 vem antes do verbo.';
-
-      if (pattern === 'sbuvo') {
-        const verbGroup = randomItem(['foodDrink', 'lookRead']);
-
-        if (verbGroup === 'foodDrink') {
-          const verb = randomItem(words.foodDrinkVerbs);
-          const object = randomItem(words.foodDrinkObjects[verb.hanzi]);
-          answerTokens = [subject, neg, verb, object];
-        } else {
-          const verb = randomItem(words.lookReadVerbs);
-          const object = randomItem(words.lookReadObjects[verb.hanzi]);
-          answerTokens = [subject, neg, verb, object];
-        }
-      }
-
-      if (pattern === 'sbuvplace') {
-        const verb = randomItem(words.moveVerbs);
-        const place = randomItem(words.places);
-        answerTokens = [subject, neg, verb, place];
-      }
-
-      if (pattern === 'sbuvphone') {
-        const verb = randomItem(words.phoneVerbs);
-        answerTokens = [subject, neg, verb];
-      }
-
-      return {
-        type: 'negative',
-        answerTokens,
-        bankTokens: addDistractors(answerTokens),
-        explanation,
-        promptTitle: 'Monte a frase negativa',
-        promptSubtitle: 'Lembre-se: 不 geralmente vem antes do verbo.',
-        model: null
-      };
-    }
-
-    function generateTransformQuestion() {
-      const negativeQuestion = generateNegativeQuestion();
-      const answerTokens = negativeQuestion.answerTokens;
-
-      const affirmativeTokens = answerTokens.filter(token => token.hanzi !== '不');
-      const modelInfo = buildSentenceInfo(affirmativeTokens);
-
-      return {
-        type: 'transform',
-        answerTokens,
-        bankTokens: addDistractors(answerTokens),
-        explanation: 'Para transformar em negativa, colocamos 不 antes do verbo.',
-        promptTitle: 'Transforme a frase em negativa',
-        promptSubtitle: 'Observe a frase afirmativa e monte a versão negativa.',
-        model: modelInfo
-      };
+      return indexes;
     }
 
     function generateQuestionWithAvoidRepeat() {
-      let tries = 0;
+      const allowedIndexes = getAvailableQuestionIndexes();
+      let candidates = allowedIndexes.filter(index => !usedQuestionIndexes.includes(index));
 
-      while (tries < 40) {
-        let q;
-
-        if (selectedMode === 'affirmative') q = generateAffirmativeQuestion();
-        if (selectedMode === 'negative') q = generateNegativeQuestion();
-        if (selectedMode === 'transform') q = generateTransformQuestion();
-
-        const key = sentenceToKey(q.answerTokens);
-
-        if (!usedSentenceKeys.includes(key)) {
-          usedSentenceKeys.push(key);
-
-          if (usedSentenceKeys.length > 20) {
-            usedSentenceKeys.shift();
-          }
-
-          return q;
-        }
-
-        tries++;
+      if (candidates.length === 0) {
+        candidates = allowedIndexes;
       }
 
-      if (selectedMode === 'affirmative') return generateAffirmativeQuestion();
-      if (selectedMode === 'negative') return generateNegativeQuestion();
-      return generateTransformQuestion();
+      const chosenIndex = randomItem(candidates);
+      uniqueRecentPush(chosenIndex);
+
+      const sentence = translationSentences[chosenIndex];
+      const answerTokens = buildTokenObjects(sentence.tokens);
+      const bankTokens = buildBankTokens(sentence.tokens);
+
+      return {
+        index: chosenIndex,
+        pt: sentence.pt,
+        answerTokens,
+        bankTokens,
+        explanation: sentence.explanation
+      };
     }
 
     /* =========================
@@ -798,21 +687,6 @@
       });
     }
 
-    function renderModel(model) {
-      if (!model) {
-        modelBox.classList.add('hidden');
-        modelHanzi.innerText = '';
-        modelPinyin.innerText = '';
-        modelTranslation.innerText = '';
-        return;
-      }
-
-      modelBox.classList.remove('hidden');
-      modelHanzi.innerText = model.hanzi;
-      modelPinyin.innerText = model.pinyin;
-      modelTranslation.innerText = model.translation;
-    }
-
     function hideFeedback() {
       feedbackBox.classList.add('hidden');
       feedbackTitle.innerText = '';
@@ -823,7 +697,7 @@
       reasonLine.innerHTML = '';
     }
 
-    function showFeedback(isCorrect, userHanzi, correctInfo, reason) {
+    function showFeedback(isCorrect, userHanzi, correctHanzi, correctPinyin, correctPt, reason) {
       feedbackBox.classList.remove('hidden');
 
       if (isCorrect) {
@@ -833,9 +707,9 @@
       }
 
       yourAnswerLine.innerHTML = `<strong>Sua frase:</strong> ${userHanzi || '(vazia)'}`;
-      correctAnswerLine.innerHTML = `<strong>Correto:</strong> ${correctInfo.hanzi}`;
-      pinyinLine.innerHTML = `<strong>Pinyin:</strong> ${correctInfo.pinyin}`;
-      translationLine.innerHTML = `<strong>Tradução:</strong> ${correctInfo.translation}`;
+      correctAnswerLine.innerHTML = `<strong>Correto:</strong> ${correctHanzi}`;
+      pinyinLine.innerHTML = `<strong>Pinyin:</strong> ${correctPinyin}`;
+      translationLine.innerHTML = `<strong>Tradução:</strong> ${correctPt}`;
       reasonLine.innerHTML = `<strong>Por quê?</strong> ${reason}`;
     }
 
@@ -845,18 +719,15 @@
     function generateNewRound(isFirst = false) {
       if (!isFirst) {
         currentRound++;
-        updateTopBar();
       }
 
+      updateTopBar();
       hideFeedback();
       playerAnswer = [];
 
       currentQuestion = generateQuestionWithAvoidRepeat();
 
-      challengeTitle.innerText = currentQuestion.promptTitle;
-      challengeSubtitle.innerText = currentQuestion.promptSubtitle;
-
-      renderModel(currentQuestion.model);
+      promptText.innerText = currentQuestion.pt;
       renderWordBank(currentQuestion.bankTokens);
       renderDropZone();
     }
@@ -879,6 +750,7 @@
 
       playerAnswer.pop();
       renderWordBank(currentQuestion.bankTokens);
+
       playerAnswer.forEach(answerToken => {
         const chips = [...wordBank.querySelectorAll('.word-chip')];
         const chipToMark = chips.find(chip => {
@@ -887,45 +759,57 @@
         });
         if (chipToMark) chipToMark.classList.add('used');
       });
+
       renderDropZone();
     }
 
-    function detectErrorReason(userTokens, correctTokens) {
+    function detectErrorReason(userTokens, correctTokens, explanation) {
       const userHanzi = userTokens.map(t => t.hanzi);
       const correctHanzi = correctTokens.map(t => t.hanzi);
 
       if (userHanzi.length === 0) {
-        return 'Você ainda não montou a frase. Tente organizar sujeito, verbo e complemento na ordem correta.';
-      }
-
-      if (correctHanzi.includes('不') && !userHanzi.includes('不')) {
-        return 'A frase correta precisava da negação 不 antes do verbo.';
-      }
-
-      if (!correctHanzi.includes('不') && userHanzi.includes('不')) {
-        return 'Nesta rodada a frase é afirmativa, então 不 não deve aparecer.';
-      }
-
-      const correctNegIndex = correctHanzi.indexOf('不');
-      const userNegIndex = userHanzi.indexOf('不');
-
-      if (correctNegIndex !== -1 && userNegIndex !== -1 && correctNegIndex !== userNegIndex) {
-        return 'Em frases negativas simples, 不 vem antes do verbo.';
+        return 'Você ainda não montou a frase. Tente organizar as palavras na ordem correta do chinês.';
       }
 
       if (userHanzi.length !== correctHanzi.length) {
-        return 'A quantidade de palavras não corresponde à estrutura esperada da frase.';
+        return 'A quantidade de palavras não corresponde à frase correta. Pode estar faltando ou sobrando alguma palavra.';
       }
 
-      if (userHanzi[0] !== correctHanzi[0]) {
-        return 'Normalmente a frase começa com o sujeito.';
+      if (correctHanzi.includes('吗') && userHanzi[userHanzi.length - 1] !== '吗') {
+        return 'Quando a frase é uma pergunta simples com “sim ou não”, 吗 normalmente fica no final.';
+      }
+
+      if (correctHanzi.includes('不')) {
+        const correctNegIndex = correctHanzi.indexOf('不');
+        const userNegIndex = userHanzi.indexOf('不');
+
+        if (userNegIndex === -1) {
+          return 'Faltou a negação 不 na frase.';
+        }
+
+        if (userNegIndex !== correctNegIndex) {
+          return 'Em frases negativas simples, 不 costuma vir antes do verbo.';
+        }
+      }
+
+      if (correctHanzi.includes('只')) {
+        const correctOnlyIndex = correctHanzi.indexOf('只');
+        const userOnlyIndex = userHanzi.indexOf('只');
+
+        if (userOnlyIndex === -1) {
+          return 'Faltou a palavra 只, que dá a ideia de “só/apenas”.';
+        }
+
+        if (userOnlyIndex !== correctOnlyIndex) {
+          return '只 normalmente aparece antes do verbo principal.';
+        }
       }
 
       if (!arraysEqual(userHanzi, correctHanzi)) {
-        return 'A ordem básica usada aqui é sujeito + verbo + complemento. Em frases negativas, use sujeito + 不 + verbo + complemento.';
+        return 'A ordem das palavras no chinês está diferente da esperada nessa frase.';
       }
 
-      return currentQuestion.explanation;
+      return explanation;
     }
 
     function checkAnswer() {
@@ -935,16 +819,37 @@
       const userHanziArray = userTokens.map(t => t.hanzi);
       const correctHanziArray = correctTokens.map(t => t.hanzi);
 
-      const correctInfo = buildSentenceInfo(correctTokens);
-      const userHanzi = userHanziArray.join('');
-
       const isCorrect = arraysEqual(userHanziArray, correctHanziArray);
 
+      const userHanzi = tokensToHanzi(userTokens);
+      const correctHanzi = tokensToHanzi(correctTokens);
+      const correctPinyin = tokensToPinyin(correctTokens);
+      const correctPt = currentQuestion.pt;
+
       if (isCorrect) {
-        showFeedback(true, userHanzi, correctInfo, currentQuestion.explanation);
+        showFeedback(
+          true,
+          userHanzi,
+          correctHanzi,
+          correctPinyin,
+          correctPt,
+          currentQuestion.explanation
+        );
       } else {
-        const reason = detectErrorReason(userTokens, correctTokens);
-        showFeedback(false, userHanzi, correctInfo, reason);
+        const reason = detectErrorReason(
+          userTokens,
+          correctTokens,
+          currentQuestion.explanation
+        );
+
+        showFeedback(
+          false,
+          userHanzi,
+          correctHanzi,
+          correctPinyin,
+          correctPt,
+          reason
+        );
       }
     }
   </script>
