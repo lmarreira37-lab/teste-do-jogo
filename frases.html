@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Construção de Frases - Mandarim</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f8ff;
+      margin: 20px;
+      color: #222;
+    }
+
+    h1, h2, h3, p {
+      text-align: center;
+    }
+
+    button {
+      padding: 12px 22px;
+      border-radius: 10px;
+      border: none;
+      background: #007bff;
+      color: white;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 15px;
+    }
+
+    button:hover {
+      opacity: 0.92;
+    }
+
+    .secondary-btn {
+      background: #6c757d;
+    }
+
+    .success-btn {
+      background: #28a745;
+    }
+
+    .danger-btn {
+      background: #dc3545;
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    .info-box {
+      background: white;
+      padding: 10px 15px;
+      border-radius: 8px;
+      border: 2px solid #333;
+      font-weight: bold;
+    }
+
+    .screen-card {
+      max-width: 1100px;
+      margin: 30px auto;
+      background: white;
+      border: 2px solid #333;
+      border-radius: 16px;
+      padding: 30px 20px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    }
+
+    .menu-section {
+      margin-top: 25px;
+    }
+
+    .option-group {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      flex-wrap: wrap;
+      margin-top: 15px;
+    }
+
+    .option-card {
+      background: #f8fbff;
+      border: 2px solid #333;
+      border-radius: 14px;
+      padding: 20px;
+      width: 250px;
+      text-align: center;
+      cursor: pointer;
+      transition: 0.2s;
+      box-sizing: border-box;
+    }
+
+    .option-card:hover {
+      transform: scale(1.03);
+    }
+
+    .option-card.selected {
+      background: #dff0ff;
+      border-color: #007bff;
+    }
+
+    .option-card h3 {
+      margin-top: 0;
+      margin-bottom: 10px;
+    }
+
+    .option-card p {
+      margin: 8px 0;
+      font-size: 14px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .sentence-box {
+      max-width: 900px;
+      margin: 20px auto 0;
+      background: #f8fbff;
+      border: 2px solid #333;
+      border-radius: 16px;
+      padding: 25px 20px;
+    }
+
+    .challenge-title {
+      font-size: 22px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+    .challenge-subtitle {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #555;
+    }
+
+    .model-box {
+      max-width: 700px;
+      margin: 0 auto 20px;
+      background: #fff;
+      border: 2px dashed #666;
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+    }
+
+    .model-hanzi {
+      font-size: 34px;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    .model-pinyin {
+      font-size: 18px;
+      color: #444;
+      font-weight: bold;
+      margin-bottom: 6px;
+    }
+
+    .model-translation {
+      font-size: 16px;
+      color: #333;
+    }
+
+    .drop-zone {
+      min-height: 90px;
+      border: 2px dashed #333;
+      border-radius: 14px;
+      background: #fff;
+      padding: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+
+    .word-bank {
+      min-height: 110px;
+      border: 2px solid #333;
+      border-radius: 14px;
+      background: #fff;
+      padding: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+
+    .word-chip {
+      background: #eaf4ff;
+      border: 2px solid #333;
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 22px;
+      font-weight: bold;
+      cursor: pointer;
+      user-select: none;
+      transition: 0.2s;
+    }
+
+    .word-chip:hover {
+      transform: scale(1.05);
+    }
+
+    .word-chip.used {
+      opacity: 0.4;
+      pointer-events: none;
+    }
+
+    .actions {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+
+    .feedback-box {
+      max-width: 760px;
+      margin: 20px auto 0;
+      background: #fff;
+      border: 2px solid #333;
+      border-radius: 14px;
+      padding: 18px;
+    }
+
+    .feedback-title {
+      text-align: center;
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 12px;
+    }
+
+    .feedback-line {
+      margin: 8px 0;
+      font-size: 16px;
+      line-height: 1.5;
+    }
+
+    .correct {
+      color: #198754;
+      font-weight: bold;
+    }
+
+    .wrong {
+      color: #dc3545;
+      font-weight: bold;
+    }
+
+    .small-note {
+      text-align: center;
+      color: #555;
+      margin-top: 10px;
+      font-size: 14px;
+    }
+
+    @media (max-width: 700px) {
+      .option-card {
+        width: 100%;
+        max-width: 300px;
+      }
+
+      .word-chip {
+        font-size: 18px;
+      }
+
+      .model-hanzi {
+        font-size: 28px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- MENU -->
+  <div id="menuScreen" class="screen-card">
+    <h1>Construção de Frases</h1>
+    <p>Escolha o modo de treino</p>
+
+    <div class="menu-section">
+      <h2>Modo</h2>
+      <div class="option-group mode-options">
+        <div class="option-card selected" onclick="selectMode('affirmative', this)">
+          <h3>✅ Afirmativa</h3>
+          <p>Monte uma frase afirmativa</p>
+        </div>
+
+        <div class="option-card" onclick="selectMode('negative', this)">
+          <h3>❌ Negativa</h3>
+          <p>Monte uma frase negativa</p>
+        </div>
+
+        <div class="option-card" onclick="selectMode('transform', this)">
+          <h3>🔄 Transformar em negativa</h3>
+          <p>Veja a afirmativa e monte a negativa</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="menu-section">
+      <h2>Nível</h2>
+      <div class="option-group level-options">
+        <div class="option-card selected" onclick="selectLevel('easy', this)">
+          <h3>🟢 Fácil</h3>
+          <p>Estruturas mais curtas</p>
+        </div>
+
+        <div class="option-card" onclick="selectLevel('medium', this)">
+          <h3>🟡 Médio</h3>
+          <p>Mais combinações</p>
+        </div>
+
+        <div class="option-card" onclick="selectLevel('hard', this)">
+          <h3>🔴 Difícil</h3>
+          <p>Mais variedade e distratores</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="top-bar" style="margin-top:25px;">
+      <button class="secondary-btn" onclick="window.location.href='index.html'">Voltar ao jogo principal</button>
+      <button class="success-btn" onclick="startGame()">Começar</button>
+    </div>
+  </div>
+
+  <!-- JOGO -->
+  <div id="gameScreen" class="screen-card hidden">
+    <h1>Construção de Frases</h1>
+
+    <div class="top-bar">
+      <div class="info-box" id="modeDisplay">Modo: -</div>
+      <div class="info-box" id="levelDisplay">Nível: -</div>
+      <div class="info-box" id="roundDisplay">Rodada: 1</div>
+    </div>
+
+    <div class="top-bar">
+      <button onclick="restartCurrentRound()">Reiniciar rodada</button>
+      <button onclick="generateNewRound()">Nova frase</button>
+      <button class="secondary-btn" onclick="backToMenu()">Voltar ao menu</button>
+    </div>
+
+    <div class="sentence-box">
+      <div class="challenge-title" id="challengeTitle">Monte a frase</div>
+      <div class="challenge-subtitle" id="challengeSubtitle">Clique nas palavras para montar a frase correta</div>
+
+      <div id="modelBox" class="model-box hidden">
+        <div class="model-hanzi" id="modelHanzi"></div>
+        <div class="model-pinyin" id="modelPinyin"></div>
+        <div class="model-translation" id="modelTranslation"></div>
+      </div>
+
+      <h3>Sua frase</h3>
+      <div id="dropZone" class="drop-zone"></div>
+
+      <h3>Palavras disponíveis</h3>
+      <div id="wordBank" class="word-bank"></div>
+
+      <div class="actions">
+        <button onclick="checkAnswer()">Responder</button>
+        <button class="danger-btn" onclick="removeLastWord()">Remover última</button>
+        <button class="secondary-btn" onclick="clearAnswer()">Limpar</button>
+      </div>
+
+      <div class="small-note">
+        As frases são geradas com palavras já existentes no seu jogo.
+      </div>
+    </div>
+
+    <div id="feedbackBox" class="feedback-box hidden">
+      <div class="feedback-title" id="feedbackTitle"></div>
+      <div class="feedback-line" id="yourAnswerLine"></div>
+      <div class="feedback-line" id="correctAnswerLine"></div>
+      <div class="feedback-line" id="pinyinLine"></div>
+      <div class="feedback-line" id="translationLine"></div>
+      <div class="feedback-line" id="reasonLine"></div>
+
+      <div class="actions" style="margin-top:18px;">
+        <button class="success-btn" onclick="generateNewRound()">Próxima frase</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* =========================
+       BASE DE PALAVRAS
+    ========================= */
+    const words = {
+      subjects: [
+        { hanzi: '我', pinyin: 'wǒ', pt: 'eu' },
+        { hanzi: '你', pinyin: 'nǐ', pt: 'você' },
+        { hanzi: '他', pinyin: 'tā', pt: 'ele' },
+        { hanzi: '她', pinyin: 'tā', pt: 'ela' },
+        { hanzi: '爸爸', pinyin: 'bàba', pt: 'papai' },
+        { hanzi: '妈妈', pinyin: 'māma', pt: 'mamãe' },
+        { hanzi: '儿子', pinyin: 'érzi', pt: 'filho' }
+      ],
+
+      foodDrinkVerbs: [
+        { hanzi: '吃', pinyin: 'chī', pt: 'comer' },
+        { hanzi: '喝', pinyin: 'hē', pt: 'beber' }
+      ],
+
+      lookReadVerbs: [
+        { hanzi: '看', pinyin: 'kàn', pt: 'ver' },
+        { hanzi: '读', pinyin: 'dú', pt: 'ler' }
+      ],
+
+      moveVerbs: [
+        { hanzi: '去', pinyin: 'qù', pt: 'ir' }
+      ],
+
+      phoneVerbs: [
+        { hanzi: '打电话', pinyin: 'dǎ diànhuà', pt: 'telefonar' }
+      ],
+
+      foodDrinkObjects: {
+        '吃': [
+          { hanzi: '菜', pinyin: 'cài', pt: 'comida' }
+        ],
+        '喝': [
+          { hanzi: '茶', pinyin: 'chá', pt: 'chá' },
+          { hanzi: '咖啡', pinyin: 'kāfēi', pt: 'café' },
+          { hanzi: '水', pinyin: 'shuǐ', pt: 'água' },
+          { hanzi: '橙汁', pinyin: 'chéngzhī', pt: 'suco de laranja' },
+          { hanzi: '可口可乐', pinyin: 'kěkǒukělè', pt: 'coca-cola' }
+        ]
+      },
+
+      lookReadObjects: {
+        '看': [
+          { hanzi: '电影', pinyin: 'diànyǐng', pt: 'filme' },
+          { hanzi: '电视', pinyin: 'diànshì', pt: 'TV' }
+        ],
+        '读': [
+          { hanzi: '本', pinyin: 'běn', pt: 'livro' },
+          { hanzi: '汉语', pinyin: 'hànyǔ', pt: 'chinês' },
+          { hanzi: '法语', pinyin: 'fǎyǔ', pt: 'francês' },
+          { hanzi: '葡萄牙语', pinyin: 'pútaoyáyǔ', pt: 'português' }
+        ]
+      },
+
+      places: [
+        { hanzi: '北京', pinyin: 'běijīng', pt: 'Pequim' },
+        { hanzi: '酒店', pinyin: 'jiǔdiàn', pt: 'hotel' },
+        { hanzi: '学校', pinyin: 'xuéxiào', pt: 'escola' },
+        { hanzi: '中学', pinyin: 'zhōngxué', pt: 'escola secundária' },
+        { hanzi: '小学', pinyin: 'xiǎoxué', pt: 'escola primária' },
+        { hanzi: '这儿', pinyin: 'zhèr', pt: 'aqui' },
+        { hanzi: '那儿', pinyin: 'nàr', pt: 'lá' }
+      ],
+
+      negativeWord: { hanzi: '不', pinyin: 'bù', pt: 'não' },
+
+      distractors: [
+        { hanzi: '都', pinyin: 'dōu', pt: 'todos' },
+        { hanzi: '也', pinyin: 'yě', pt: 'também' },
+        { hanzi: '多少', pinyin: 'duōshao', pt: 'quanto' },
+        { hanzi: '大', pinyin: 'dà', pt: 'grande' },
+        { hanzi: '点', pinyin: 'diǎn', pt: 'hora' },
+        { hanzi: '电脑', pinyin: 'diànnǎo', pt: 'computador' }
+      ]
+    };
+
+    /* =========================
+       ESTADO
+    ========================= */
+    let selectedMode = 'affirmative';
+    let selectedModeName = 'Afirmativa';
+    let selectedLevel = 'easy';
+    let selectedLevelName = 'Fácil';
+
+    let currentRound = 1;
+    let currentQuestion = null;
+    let usedSentenceKeys = [];
+
+    let playerAnswer = [];
+
+    const menuScreen = document.getElementById('menuScreen');
+    const gameScreen = document.getElementById('gameScreen');
+
+    const modeDisplay = document.getElementById('modeDisplay');
+    const levelDisplay = document.getElementById('levelDisplay');
+    const roundDisplay = document.getElementById('roundDisplay');
+
+    const challengeTitle = document.getElementById('challengeTitle');
+    const challengeSubtitle = document.getElementById('challengeSubtitle');
+
+    const modelBox = document.getElementById('modelBox');
+    const modelHanzi = document.getElementById('modelHanzi');
+    const modelPinyin = document.getElementById('modelPinyin');
+    const modelTranslation = document.getElementById('modelTranslation');
+
+    const dropZone = document.getElementById('dropZone');
+    const wordBank = document.getElementById('wordBank');
+
+    const feedbackBox = document.getElementById('feedbackBox');
+    const feedbackTitle = document.getElementById('feedbackTitle');
+    const yourAnswerLine = document.getElementById('yourAnswerLine');
+    const correctAnswerLine = document.getElementById('correctAnswerLine');
+    const pinyinLine = document.getElementById('pinyinLine');
+    const translationLine = document.getElementById('translationLine');
+    const reasonLine = document.getElementById('reasonLine');
+
+    /* =========================
+       UTILITÁRIOS
+    ========================= */
+    function randomItem(arr) {
+      return arr[Math.floor(Math.random() * arr.length)];
+    }
+
+    function shuffleArray(arr) {
+      return [...arr].sort(() => Math.random() - 0.5);
+    }
+
+    function arraysEqual(a, b) {
+      if (a.length !== b.length) return false;
+      for (let i = 0; i < a.length; i++) {
+        if (a[i] !== b[i]) return false;
+      }
+      return true;
+    }
+
+    function sentenceToKey(tokens) {
+      return tokens.map(t => t.hanzi).join('|');
+    }
+
+    function buildSentenceInfo(tokens) {
+      return {
+        hanzi: tokens.map(t => t.hanzi).join(''),
+        pinyin: tokens.map(t => t.pinyin).join(' '),
+        translation: tokens.map(t => t.pt).join(' ')
+      };
+    }
+
+    function addDistractors(baseTokens) {
+      let count = 0;
+
+      if (selectedLevel === 'medium') count = 1;
+      if (selectedLevel === 'hard') count = 2;
+
+      if (count === 0) return shuffleArray(baseTokens);
+
+      const extras = shuffleArray(words.distractors).slice(0, count);
+      return shuffleArray([...baseTokens, ...extras]);
+    }
+
+    function updateTopBar() {
+      modeDisplay.innerText = `Modo: ${selectedModeName}`;
+      levelDisplay.innerText = `Nível: ${selectedLevelName}`;
+      roundDisplay.innerText = `Rodada: ${currentRound}`;
+    }
+
+    /* =========================
+       SELEÇÃO MENU
+    ========================= */
+    function selectMode(mode, element) {
+      selectedMode = mode;
+
+      if (mode === 'affirmative') selectedModeName = 'Afirmativa';
+      if (mode === 'negative') selectedModeName = 'Negativa';
+      if (mode === 'transform') selectedModeName = 'Transformar em negativa';
+
+      document.querySelectorAll('.mode-options .option-card').forEach(card => {
+        card.classList.remove('selected');
+      });
+      element.classList.add('selected');
+    }
+
+    function selectLevel(level, element) {
+      selectedLevel = level;
+
+      if (level === 'easy') selectedLevelName = 'Fácil';
+      if (level === 'medium') selectedLevelName = 'Médio';
+      if (level === 'hard') selectedLevelName = 'Difícil';
+
+      document.querySelectorAll('.level-options .option-card').forEach(card => {
+        card.classList.remove('selected');
+      });
+      element.classList.add('selected');
+    }
+
+    function startGame() {
+      currentRound = 1;
+      usedSentenceKeys = [];
+      hideFeedback();
+      playerAnswer = [];
+      menuScreen.classList.add('hidden');
+      gameScreen.classList.remove('hidden');
+      updateTopBar();
+      generateNewRound(true);
+    }
+
+    function backToMenu() {
+      gameScreen.classList.add('hidden');
+      menuScreen.classList.remove('hidden');
+    }
+
+    /* =========================
+       GERADOR DE FRASES
+    ========================= */
+    function generateAffirmativeQuestion() {
+      const patternPoolEasy = ['svo', 'svplace'];
+      const patternPoolMedium = ['svo', 'svplace', 'svphone'];
+      const patternPoolHard = ['svo', 'svplace', 'svphone'];
+
+      let patternPool = patternPoolEasy;
+      if (selectedLevel === 'medium') patternPool = patternPoolMedium;
+      if (selectedLevel === 'hard') patternPool = patternPoolHard;
+
+      const pattern = randomItem(patternPool);
+      const subject = randomItem(words.subjects);
+
+      let answerTokens = [];
+      let explanation = 'A ordem básica da frase afirmativa é sujeito + verbo + complemento.';
+
+      if (pattern === 'svo') {
+        const verbGroup = randomItem(['foodDrink', 'lookRead']);
+
+        if (verbGroup === 'foodDrink') {
+          const verb = randomItem(words.foodDrinkVerbs);
+          const object = randomItem(words.foodDrinkObjects[verb.hanzi]);
+          answerTokens = [subject, verb, object];
+        } else {
+          const verb = randomItem(words.lookReadVerbs);
+          const object = randomItem(words.lookReadObjects[verb.hanzi]);
+          answerTokens = [subject, verb, object];
+        }
+      }
+
+      if (pattern === 'svplace') {
+        const verb = randomItem(words.moveVerbs);
+        const place = randomItem(words.places);
+        answerTokens = [subject, verb, place];
+      }
+
+      if (pattern === 'svphone') {
+        const verb = randomItem(words.phoneVerbs);
+        answerTokens = [subject, verb];
+        explanation = 'Nesta frase, a ordem básica continua sendo sujeito + verbo.';
+      }
+
+      return {
+        type: 'affirmative',
+        answerTokens,
+        bankTokens: addDistractors(answerTokens),
+        explanation,
+        promptTitle: 'Monte a frase afirmativa',
+        promptSubtitle: 'Clique nas palavras para formar a frase correta.',
+        model: null
+      };
+    }
+
+    function generateNegativeQuestion() {
+      const patternPoolEasy = ['sbuvo', 'sbuvplace'];
+      const patternPoolMedium = ['sbuvo', 'sbuvplace', 'sbuvphone'];
+      const patternPoolHard = ['sbuvo', 'sbuvplace', 'sbuvphone'];
+
+      let patternPool = patternPoolEasy;
+      if (selectedLevel === 'medium') patternPool = patternPoolMedium;
+      if (selectedLevel === 'hard') patternPool = patternPoolHard;
+
+      const pattern = randomItem(patternPool);
+      const subject = randomItem(words.subjects);
+      const neg = words.negativeWord;
+
+      let answerTokens = [];
+      let explanation = 'Em frases negativas simples, 不 vem antes do verbo.';
+
+      if (pattern === 'sbuvo') {
+        const verbGroup = randomItem(['foodDrink', 'lookRead']);
+
+        if (verbGroup === 'foodDrink') {
+          const verb = randomItem(words.foodDrinkVerbs);
+          const object = randomItem(words.foodDrinkObjects[verb.hanzi]);
+          answerTokens = [subject, neg, verb, object];
+        } else {
+          const verb = randomItem(words.lookReadVerbs);
+          const object = randomItem(words.lookReadObjects[verb.hanzi]);
+          answerTokens = [subject, neg, verb, object];
+        }
+      }
+
+      if (pattern === 'sbuvplace') {
+        const verb = randomItem(words.moveVerbs);
+        const place = randomItem(words.places);
+        answerTokens = [subject, neg, verb, place];
+      }
+
+      if (pattern === 'sbuvphone') {
+        const verb = randomItem(words.phoneVerbs);
+        answerTokens = [subject, neg, verb];
+      }
+
+      return {
+        type: 'negative',
+        answerTokens,
+        bankTokens: addDistractors(answerTokens),
+        explanation,
+        promptTitle: 'Monte a frase negativa',
+        promptSubtitle: 'Lembre-se: 不 geralmente vem antes do verbo.',
+        model: null
+      };
+    }
+
+    function generateTransformQuestion() {
+      const negativeQuestion = generateNegativeQuestion();
+      const answerTokens = negativeQuestion.answerTokens;
+
+      const affirmativeTokens = answerTokens.filter(token => token.hanzi !== '不');
+      const modelInfo = buildSentenceInfo(affirmativeTokens);
+
+      return {
+        type: 'transform',
+        answerTokens,
+        bankTokens: addDistractors(answerTokens),
+        explanation: 'Para transformar em negativa, colocamos 不 antes do verbo.',
+        promptTitle: 'Transforme a frase em negativa',
+        promptSubtitle: 'Observe a frase afirmativa e monte a versão negativa.',
+        model: modelInfo
+      };
+    }
+
+    function generateQuestionWithAvoidRepeat() {
+      let tries = 0;
+
+      while (tries < 40) {
+        let q;
+
+        if (selectedMode === 'affirmative') q = generateAffirmativeQuestion();
+        if (selectedMode === 'negative') q = generateNegativeQuestion();
+        if (selectedMode === 'transform') q = generateTransformQuestion();
+
+        const key = sentenceToKey(q.answerTokens);
+
+        if (!usedSentenceKeys.includes(key)) {
+          usedSentenceKeys.push(key);
+
+          if (usedSentenceKeys.length > 20) {
+            usedSentenceKeys.shift();
+          }
+
+          return q;
+        }
+
+        tries++;
+      }
+
+      if (selectedMode === 'affirmative') return generateAffirmativeQuestion();
+      if (selectedMode === 'negative') return generateNegativeQuestion();
+      return generateTransformQuestion();
+    }
+
+    /* =========================
+       RENDER
+    ========================= */
+    function renderWordBank(tokens) {
+      wordBank.innerHTML = '';
+
+      tokens.forEach((token, index) => {
+        const chip = document.createElement('div');
+        chip.className = 'word-chip';
+        chip.innerText = token.hanzi;
+        chip.dataset.index = index;
+
+        chip.onclick = () => {
+          if (chip.classList.contains('used')) return;
+          playerAnswer.push(token);
+          chip.classList.add('used');
+          renderDropZone();
+        };
+
+        wordBank.appendChild(chip);
+      });
+    }
+
+    function renderDropZone() {
+      dropZone.innerHTML = '';
+
+      if (playerAnswer.length === 0) {
+        dropZone.innerHTML = '<p style="margin:0;color:#666;">Sua frase aparecerá aqui</p>';
+        return;
+      }
+
+      playerAnswer.forEach(token => {
+        const chip = document.createElement('div');
+        chip.className = 'word-chip';
+        chip.innerText = token.hanzi;
+        dropZone.appendChild(chip);
+      });
+    }
+
+    function renderModel(model) {
+      if (!model) {
+        modelBox.classList.add('hidden');
+        modelHanzi.innerText = '';
+        modelPinyin.innerText = '';
+        modelTranslation.innerText = '';
+        return;
+      }
+
+      modelBox.classList.remove('hidden');
+      modelHanzi.innerText = model.hanzi;
+      modelPinyin.innerText = model.pinyin;
+      modelTranslation.innerText = model.translation;
+    }
+
+    function hideFeedback() {
+      feedbackBox.classList.add('hidden');
+      feedbackTitle.innerText = '';
+      yourAnswerLine.innerHTML = '';
+      correctAnswerLine.innerHTML = '';
+      pinyinLine.innerHTML = '';
+      translationLine.innerHTML = '';
+      reasonLine.innerHTML = '';
+    }
+
+    function showFeedback(isCorrect, userHanzi, correctInfo, reason) {
+      feedbackBox.classList.remove('hidden');
+
+      if (isCorrect) {
+        feedbackTitle.innerHTML = '<span class="correct">✅ Correto!</span>';
+      } else {
+        feedbackTitle.innerHTML = '<span class="wrong">❌ Você errou</span>';
+      }
+
+      yourAnswerLine.innerHTML = `<strong>Sua frase:</strong> ${userHanzi || '(vazia)'}`;
+      correctAnswerLine.innerHTML = `<strong>Correto:</strong> ${correctInfo.hanzi}`;
+      pinyinLine.innerHTML = `<strong>Pinyin:</strong> ${correctInfo.pinyin}`;
+      translationLine.innerHTML = `<strong>Tradução:</strong> ${correctInfo.translation}`;
+      reasonLine.innerHTML = `<strong>Por quê?</strong> ${reason}`;
+    }
+
+    /* =========================
+       AÇÕES DE JOGO
+    ========================= */
+    function generateNewRound(isFirst = false) {
+      if (!isFirst) {
+        currentRound++;
+        updateTopBar();
+      }
+
+      hideFeedback();
+      playerAnswer = [];
+
+      currentQuestion = generateQuestionWithAvoidRepeat();
+
+      challengeTitle.innerText = currentQuestion.promptTitle;
+      challengeSubtitle.innerText = currentQuestion.promptSubtitle;
+
+      renderModel(currentQuestion.model);
+      renderWordBank(currentQuestion.bankTokens);
+      renderDropZone();
+    }
+
+    function restartCurrentRound() {
+      hideFeedback();
+      playerAnswer = [];
+      renderWordBank(currentQuestion.bankTokens);
+      renderDropZone();
+    }
+
+    function clearAnswer() {
+      playerAnswer = [];
+      renderWordBank(currentQuestion.bankTokens);
+      renderDropZone();
+    }
+
+    function removeLastWord() {
+      if (playerAnswer.length === 0) return;
+
+      playerAnswer.pop();
+      renderWordBank(currentQuestion.bankTokens);
+      playerAnswer.forEach(answerToken => {
+        const chips = [...wordBank.querySelectorAll('.word-chip')];
+        const chipToMark = chips.find(chip => {
+          const token = currentQuestion.bankTokens[chip.dataset.index];
+          return token === answerToken && !chip.classList.contains('used');
+        });
+        if (chipToMark) chipToMark.classList.add('used');
+      });
+      renderDropZone();
+    }
+
+    function detectErrorReason(userTokens, correctTokens) {
+      const userHanzi = userTokens.map(t => t.hanzi);
+      const correctHanzi = correctTokens.map(t => t.hanzi);
+
+      if (userHanzi.length === 0) {
+        return 'Você ainda não montou a frase. Tente organizar sujeito, verbo e complemento na ordem correta.';
+      }
+
+      if (correctHanzi.includes('不') && !userHanzi.includes('不')) {
+        return 'A frase correta precisava da negação 不 antes do verbo.';
+      }
+
+      if (!correctHanzi.includes('不') && userHanzi.includes('不')) {
+        return 'Nesta rodada a frase é afirmativa, então 不 não deve aparecer.';
+      }
+
+      const correctNegIndex = correctHanzi.indexOf('不');
+      const userNegIndex = userHanzi.indexOf('不');
+
+      if (correctNegIndex !== -1 && userNegIndex !== -1 && correctNegIndex !== userNegIndex) {
+        return 'Em frases negativas simples, 不 vem antes do verbo.';
+      }
+
+      if (userHanzi.length !== correctHanzi.length) {
+        return 'A quantidade de palavras não corresponde à estrutura esperada da frase.';
+      }
+
+      if (userHanzi[0] !== correctHanzi[0]) {
+        return 'Normalmente a frase começa com o sujeito.';
+      }
+
+      if (!arraysEqual(userHanzi, correctHanzi)) {
+        return 'A ordem básica usada aqui é sujeito + verbo + complemento. Em frases negativas, use sujeito + 不 + verbo + complemento.';
+      }
+
+      return currentQuestion.explanation;
+    }
+
+    function checkAnswer() {
+      const userTokens = playerAnswer;
+      const correctTokens = currentQuestion.answerTokens;
+
+      const userHanziArray = userTokens.map(t => t.hanzi);
+      const correctHanziArray = correctTokens.map(t => t.hanzi);
+
+      const correctInfo = buildSentenceInfo(correctTokens);
+      const userHanzi = userHanziArray.join('');
+
+      const isCorrect = arraysEqual(userHanziArray, correctHanziArray);
+
+      if (isCorrect) {
+        showFeedback(true, userHanzi, correctInfo, currentQuestion.explanation);
+      } else {
+        const reason = detectErrorReason(userTokens, correctTokens);
+        showFeedback(false, userHanzi, correctInfo, reason);
+      }
+    }
+  </script>
+</body>
+</html>
