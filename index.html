@@ -425,7 +425,12 @@ button:hover {
   <div class="menu-section">
     <h2>Nível</h2>
     <div class="option-group memory-level-options">
-      <div class="option-card selected" onclick="selectMemoryLevel(10, 'Fácil', this)">
+      <div class="option-card selected" onclick="selectMemoryLevel(5, 'Fácil demais', this)">
+        <h3>🟢 Fácil demais</h3>
+        <p>5 pares</p>
+      </div>
+
+      <div class="option-card" onclick="selectMemoryLevel(10, 'Fácil', this)">
         <h3>🟢 Fácil</h3>
         <p>10 pares</p>
       </div>
@@ -492,7 +497,12 @@ button:hover {
   <div class="menu-section">
     <h2>Nível</h2>
     <div class="option-group typing-level-options">
-      <div class="option-card selected" onclick="selectTypingLevel(10, 'Fácil', this)">
+      <div class="option-card selected" onclick="selectTypingLevel(5, 'Fácil demais', this)">
+        <h3>🟢 Fácil demais</h3>
+        <p>5 palavras</p>
+      </div>
+
+      <div class="option-card" onclick="selectTypingLevel(10, 'Fácil', this)">
         <h3>🟢 Fácil</h3>
         <p>10 palavras</p>
       </div>
@@ -738,11 +748,13 @@ function setGameSource(source) {
 
 function getMemoryLevelLimit() {
   if (currentSource === 'student') {
+    if (memoryLevelName === 'Fácil demais') return 10;
     if (memoryLevelName === 'Fácil') return 28;
     if (memoryLevelName === 'Médio') return 56;
     return 83;
   }
 
+  if (memoryLevelName === 'Fácil demais') return 5;
   if (memoryLevelName === 'Fácil') return 10;
   if (memoryLevelName === 'Médio') return 20;
   return 30;
@@ -750,11 +762,13 @@ function getMemoryLevelLimit() {
 
 function getTypingLevelLimit() {
   if (currentSource === 'student') {
+    if (typingLevelName === 'Fácil demais') return 10;
     if (typingLevelName === 'Fácil') return 28;
     if (typingLevelName === 'Médio') return 56;
     return 83;
   }
 
+  if (typingLevelName === 'Fácil demais') return 5;
   if (typingLevelName === 'Fácil') return 10;
   if (typingLevelName === 'Médio') return 20;
   return 30;
@@ -765,21 +779,25 @@ function updateLevelTexts() {
   const typingCards = document.querySelectorAll('.typing-level-options .option-card p');
 
   if (currentSource === 'student') {
-    memoryCards[0].innerText = '28 pares';
-    memoryCards[1].innerText = '56 pares';
-    memoryCards[2].innerText = '83 pares';
-
-    typingCards[0].innerText = '28 palavras';
-    typingCards[1].innerText = '56 palavras';
-    typingCards[2].innerText = '83 palavras';
-  } else {
     memoryCards[0].innerText = '10 pares';
-    memoryCards[1].innerText = '20 pares';
-    memoryCards[2].innerText = '30 pares';
+    memoryCards[1].innerText = '28 pares';
+    memoryCards[2].innerText = '56 pares';
+    memoryCards[3].innerText = '83 pares';
 
     typingCards[0].innerText = '10 palavras';
-    typingCards[1].innerText = '20 palavras';
-    typingCards[2].innerText = '30 palavras';
+    typingCards[1].innerText = '28 palavras';
+    typingCards[2].innerText = '56 palavras';
+    typingCards[3].innerText = '83 palavras';
+  } else {
+    memoryCards[0].innerText = '5 pares';
+    memoryCards[1].innerText = '10 pares';
+    memoryCards[2].innerText = '20 pares';
+    memoryCards[3].innerText = '30 pares';
+
+    typingCards[0].innerText = '5 palavras';
+    typingCards[1].innerText = '10 palavras';
+    typingCards[2].innerText = '20 palavras';
+    typingCards[3].innerText = '30 palavras';
   }
 }
 
@@ -891,8 +909,8 @@ function goBackFromTypingMenu() {
 /* =========================
    JOGO DA MEMÓRIA
 ========================= */
-let memoryLevel = 10;
-let memoryLevelName = 'Fácil';
+let memoryLevel = 5;
+let memoryLevelName = 'Fácil demais';
 let memoryMode = 'pinyin';
 let memoryModeName = 'Ideograma + Pinyin';
 
@@ -1070,8 +1088,8 @@ function initMemoryGame() {
 /* =========================
    JOGO DE DIGITAR PINYIN
 ========================= */
-let typingLevel = 10;
-let typingLevelName = 'Fácil';
+let typingLevel = 5;
+let typingLevelName = 'Fácil demais';
 let typingMode = 'ideogram_only';
 let typingModeName = 'Somente Ideograma';
 let typingAccentMode = 'with_accent';
