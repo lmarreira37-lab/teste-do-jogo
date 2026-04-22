@@ -1,597 +1,299 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Mandarim Study Game</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Jogo de Tradução - Mandarim para Português</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f8ff;
+      margin: 20px;
+      color: #222;
+    }
 
-<style>
-body {
-  font-family: Arial, sans-serif;
-  background: #f0f8ff;
-  margin: 20px;
-  color: #222;
-}
+    h1, h2, h3, p {
+      text-align: center;
+    }
 
-h1, h2, h3, p {
-  text-align: center;
-}
+    button {
+      padding: 12px 22px;
+      border-radius: 10px;
+      border: none;
+      background: #007bff;
+      color: white;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 15px;
+    }
 
-button {
-  padding: 12px 22px;
-  border-radius: 10px;
-  border: none;
-  background: #007bff;
-  color: white;
-  cursor: pointer;
-  font-weight: bold;
-  font-size: 15px;
-}
+    button:hover { opacity: 0.92; }
+    .secondary-btn { background: #6c757d; }
+    .success-btn { background: #28a745; }
+    .danger-btn { background: #dc3545; }
 
-button:hover {
-  opacity: 0.92;
-}
+    .top-bar {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
 
-.secondary-btn {
-  background: #6c757d;
-}
+    .info-box {
+      background: white;
+      padding: 10px 15px;
+      border-radius: 8px;
+      border: 2px solid #333;
+      font-weight: bold;
+    }
 
-.success-btn {
-  background: #28a745;
-}
+    .screen-card {
+      max-width: 1100px;
+      margin: 30px auto;
+      background: white;
+      border: 2px solid #333;
+      border-radius: 16px;
+      padding: 30px 20px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    }
 
-.top-bar {
-  display: flex;
-  justify-content: center;
-  gap: 12px;
-  margin-bottom: 12px;
-  flex-wrap: wrap;
-}
+    .menu-section { margin-top: 25px; }
 
-.info-box {
-  background: white;
-  padding: 10px 15px;
-  border-radius: 8px;
-  border: 2px solid #333;
-  font-weight: bold;
-}
+    .option-group {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      flex-wrap: wrap;
+      margin-top: 15px;
+    }
 
-.screen-card {
-  max-width: 1100px;
-  margin: 30px auto;
-  background: white;
-  border: 2px solid #333;
-  border-radius: 16px;
-  padding: 30px 20px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-}
+    .option-card {
+      background: #f8fbff;
+      border: 2px solid #333;
+      border-radius: 14px;
+      padding: 20px;
+      width: 250px;
+      text-align: center;
+      cursor: pointer;
+      transition: 0.2s;
+      box-sizing: border-box;
+    }
 
-.menu-section {
-  margin-top: 25px;
-}
+    .option-card:hover { transform: scale(1.03); }
+    .option-card.selected { background: #dff0ff; border-color: #007bff; }
+    .option-card h3 { margin-top: 0; margin-bottom: 10px; }
+    .option-card p { margin: 8px 0; font-size: 14px; }
+    .hidden { display: none; }
 
-.option-group {
-  display: flex;
-  justify-content: center;
-  gap: 15px;
-  flex-wrap: wrap;
-  margin-top: 15px;
-}
+    .quiz-box {
+      max-width: 760px;
+      margin: 20px auto 0;
+      background: #f8fbff;
+      border: 2px solid #333;
+      border-radius: 16px;
+      padding: 25px 20px;
+    }
 
-.option-card {
-  background: #f8fbff;
-  border: 2px solid #333;
-  border-radius: 14px;
-  padding: 20px;
-  width: 230px;
-  text-align: center;
-  cursor: pointer;
-  transition: 0.2s;
-  box-sizing: border-box;
-}
+    .quiz-ideogram {
+      font-size: 72px;
+      text-align: center;
+      font-weight: bold;
+      margin-bottom: 10px;
+      line-height: 1.2;
+    }
 
-.option-card:hover {
-  transform: scale(1.03);
-}
+    .quiz-pinyin {
+      text-align: center;
+      font-size: 26px;
+      font-weight: bold;
+      color: #555;
+      margin-bottom: 10px;
+    }
 
-.option-card.selected {
-  background: #dff0ff;
-  border-color: #007bff;
-}
+    .quiz-emoji {
+      text-align: center;
+      font-size: 34px;
+      margin-bottom: 6px;
+    }
 
-.option-card h3 {
-  margin-top: 0;
-  margin-bottom: 10px;
-}
+    .quiz-instruction {
+      text-align: center;
+      color: #555;
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
 
-.option-card p {
-  margin: 8px 0;
-  font-size: 14px;
-}
+    .quiz-input {
+      display: block;
+      width: 100%;
+      max-width: 420px;
+      margin: 0 auto 15px;
+      padding: 12px;
+      font-size: 18px;
+      border: 2px solid #333;
+      border-radius: 10px;
+      box-sizing: border-box;
+      text-align: center;
+    }
 
-.hidden {
-  display: none;
-}
+    .feedback {
+      text-align: center;
+      font-weight: bold;
+      min-height: 24px;
+      margin-bottom: 15px;
+      font-size: 18px;
+    }
 
-/* MEMÓRIA */
-.grid {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 10px;
-  max-width: 1000px;
-  margin: auto;
-}
+    .feedback.correct { color: #198754; }
+    .feedback.wrong { color: #dc3545; }
 
-.card {
-  background: white;
-  border: 2px solid #333;
-  border-radius: 10px;
-  height: 120px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  user-select: none;
-  transition: transform 0.2s;
-  text-align: center;
-  padding: 5px;
-  box-sizing: border-box;
-}
+    .answer-box {
+      text-align: center;
+      margin-top: 10px;
+      font-size: 16px;
+      line-height: 1.7;
+    }
 
-.card:hover {
-  transform: scale(1.03);
-}
+    .quiz-actions {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 15px;
+    }
 
-.matched {
-  background: #c8f7c5;
-}
+    .small-note {
+      text-align: center;
+      color: #555;
+      margin-top: 14px;
+      font-size: 14px;
+      line-height: 1.5;
+    }
 
-.card-content {
-  text-align: center;
-  padding: 5px;
-}
+    @media (max-width: 700px) {
+      .option-card {
+        width: 100%;
+        max-width: 300px;
+      }
 
-.ideogram {
-  font-size: 30px;
-  font-weight: bold;
-}
-
-.pinyin {
-  font-size: 16px;
-  color: #555;
-  margin-top: 4px;
-  font-weight: bold;
-}
-
-.translation {
-  font-size: 14px;
-  margin-top: 4px;
-  font-weight: bold;
-}
-
-.emoji {
-  font-size: 28px;
-  margin-bottom: 6px;
-}
-
-/* DIGITAÇÃO */
-.quiz-box {
-  max-width: 700px;
-  margin: 20px auto 0;
-  background: #f8fbff;
-  border: 2px solid #333;
-  border-radius: 16px;
-  padding: 25px 20px;
-}
-
-.quiz-ideogram {
-  font-size: 64px;
-  text-align: center;
-  font-weight: bold;
-  margin-bottom: 10px;
-}
-
-.quiz-translation {
-  text-align: center;
-  font-size: 20px;
-  margin-bottom: 10px;
-}
-
-.quiz-instruction {
-  text-align: center;
-  color: #555;
-  margin-bottom: 20px;
-}
-
-.quiz-input {
-  display: block;
-  width: 100%;
-  max-width: 360px;
-  margin: 0 auto 15px;
-  padding: 12px;
-  font-size: 18px;
-  border: 2px solid #333;
-  border-radius: 10px;
-  box-sizing: border-box;
-  text-align: center;
-}
-
-.feedback {
-  text-align: center;
-  font-weight: bold;
-  min-height: 24px;
-  margin-bottom: 15px;
-}
-
-.feedback.correct {
-  color: #198754;
-}
-
-.feedback.wrong {
-  color: #dc3545;
-}
-
-.answer-box {
-  text-align: center;
-  margin-top: 10px;
-  font-size: 16px;
-}
-
-.quiz-actions {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-top: 15px;
-}
-
-.progress-text {
-  text-align: center;
-  margin-top: 10px;
-  font-weight: bold;
-}
-
-/* LIVRO DO ALUNO */
-.book-actions {
-  display: flex;
-  justify-content: center;
-  gap: 12px;
-  flex-wrap: wrap;
-  margin: 20px 0;
-}
-
-.word-list {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 14px;
-  margin-top: 25px;
-}
-
-.word-item {
-  background: #f8fbff;
-  border: 2px solid #333;
-  border-radius: 14px;
-  padding: 14px;
-  text-align: center;
-}
-
-.word-item .hanzi {
-  font-size: 34px;
-  font-weight: bold;
-}
-
-.word-item .word-pinyin {
-  margin-top: 6px;
-  color: #555;
-  font-weight: bold;
-}
-
-.word-item .word-translation {
-  margin-top: 6px;
-  font-size: 14px;
-  font-weight: bold;
-}
-
-.word-item .word-emoji {
-  font-size: 28px;
-  margin-top: 6px;
-}
-
-@media (max-width: 900px) {
-  .grid {
-    grid-template-columns: repeat(4, 1fr);
-  }
-
-  .word-list {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 600px) {
-  .grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
-  .card {
-    height: 100px;
-  }
-
-  .ideogram {
-    font-size: 24px;
-  }
-
-  .option-card {
-    width: 100%;
-    max-width: 280px;
-  }
-
-  .translation, .pinyin {
-    font-size: 12px;
-  }
-
-  .quiz-ideogram {
-    font-size: 48px;
-  }
-
-  .quiz-translation {
-    font-size: 18px;
-  }
-
-  .word-list {
-    grid-template-columns: 1fr;
-  }
-}
-</style>
+      .quiz-ideogram { font-size: 54px; }
+      .quiz-pinyin { font-size: 22px; }
+      .quiz-input { font-size: 16px; }
+    }
+  </style>
 </head>
 <body>
+  <div id="menuScreen" class="screen-card">
+    <h1>Jogo de Tradução</h1>
+    <p>Treine a tradução dos ideogramas do mandarim para o português</p>
 
-<!-- MENU PRINCIPAL -->
-<div id="mainMenu" class="screen-card">
-  <h1>Mandarim Study Game</h1>
-  <p>Escolha qual área você quer abrir</p>
+    <div class="menu-section">
+      <h2>Modo de pergunta</h2>
+      <div class="option-group question-mode-options">
+        <div class="option-card selected" onclick="selectQuestionMode('ideogram_only', this)">
+          <h3>Somente ideograma</h3>
+          <p>Mostra só o 汉字</p>
+          <p>Ex.: 爱</p>
+        </div>
 
-  <div class="option-group">
-    <div class="option-card" onclick="setGameSource('base'); openMemoryMenu();">
-      <h3>🧠 Jogo da Memória</h3>
-      <p>Associe ideograma com pinyin ou tradução + pinyin</p>
-    </div>
-
-    <div class="option-card" onclick="setGameSource('base'); openTypingMenu();">
-      <h3>✍️ Escrever o Pinyin</h3>
-      <p>Veja o ideograma e digite o pinyin correto</p>
-    </div>
-
-    <div class="option-card" onclick="openStudentBook()">
-      <h3>📘 Livro do Aluno</h3>
-      <p>Veja todos os caracteres e jogue com eles</p>
-    </div>
-
-    <div class="option-card" onclick="window.location.href='frases.html'">
-      <h3>🧩 Construção de Frases</h3>
-      <p>Traduza frases do português para o chinês</p>
-    </div>
-
-    <div class="option-card" onclick="window.location.href='ditado.html'">
-      <h3>🎧 Ditado em Mandarim</h3>
-      <p>Escute a frase e monte em chinês ou traduza para o português</p>
-    </div>
-  </div>
-</div>
-
-<!-- LIVRO DO ALUNO -->
-<div id="studentBookScreen" class="screen-card hidden">
-  <h1>📘 Livro do Aluno</h1>
-  <p>Aqui estão todos os caracteres do livro do aluno</p>
-
-  <div class="top-bar">
-    <div class="info-box" id="studentWordCount">Total: 0 palavras</div>
-    <div class="info-box">Fonte: Livro do Aluno</div>
-  </div>
-
-  <div class="book-actions">
-    <button onclick="toggleStudentWordList()">Ver / Ocultar caracteres</button>
-    <button class="success-btn" onclick="openMemoryMenuFromStudent()">Jogo da Memória</button>
-    <button onclick="openTypingMenuFromStudent()">Jogo de Escrita</button>
-    <button class="secondary-btn" onclick="goToMainMenu()">Voltar</button>
-  </div>
-
-  <div id="studentWordList" class="word-list"></div>
-</div>
-
-<!-- MENU MEMÓRIA -->
-<div id="memoryMenu" class="screen-card hidden">
-  <h1>Jogo da Memória</h1>
-  <p>Escolha o modo de estudo e o nível</p>
-
-  <div class="top-bar">
-    <div class="info-box" id="memorySourceDisplayMenu">Lista: Geral</div>
-  </div>
-
-  <div class="menu-section">
-    <h2>Modo de estudo</h2>
-    <div class="option-group memory-mode-options">
-      <div class="option-card selected" onclick="selectMemoryMode('pinyin', this)">
-        <h3>汉字 + Pinyin</h3>
-        <p><strong>爱</strong> ↔ <strong>ài</strong></p>
+        <div class="option-card" onclick="selectQuestionMode('ideogram_pinyin', this)">
+          <h3>Ideograma + pinyin</h3>
+          <p>Mostra 汉字 e pinyin</p>
+          <p>Ex.: 爱 / ài</p>
+        </div>
       </div>
+    </div>
 
-      <div class="option-card" onclick="selectMemoryMode('full', this)">
-        <h3>汉字 + Tradução + Pinyin</h3>
-        <p><strong>爱</strong> ↔ <strong>ài / amor</strong></p>
+    <div class="menu-section">
+      <h2>Nível</h2>
+      <div class="option-group level-options">
+        <div class="option-card selected" onclick="selectLevel(15, 'Fácil', this)">
+          <h3>🟢 Fácil</h3>
+          <p>15 palavras</p>
+        </div>
+
+        <div class="option-card" onclick="selectLevel(35, 'Médio', this)">
+          <h3>🟡 Médio</h3>
+          <p>35 palavras</p>
+        </div>
+
+        <div class="option-card" onclick="selectLevel('all', 'Difícil', this)">
+          <h3>🔴 Difícil</h3>
+          <p>Todas as palavras</p>
+        </div>
       </div>
+    </div>
+
+    <div class="menu-section">
+      <h2>Regra do erro</h2>
+      <div class="option-group error-mode-options">
+        <div class="option-card selected" onclick="selectErrorMode('continue', this)">
+          <h3>Continuar</h3>
+          <p>Errou, vê a resposta e segue</p>
+        </div>
+
+        <div class="option-card" onclick="selectErrorMode('reset', this)">
+          <h3>Voltar do zero</h3>
+          <p>Errou, zera o progresso</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="top-bar" style="margin-top:25px;">
+      <button class="secondary-btn" onclick="window.location.href='index.html'">Voltar ao jogo principal</button>
+      <button class="success-btn" onclick="startGame()">Começar</button>
     </div>
   </div>
 
-  <div class="menu-section">
-    <h2>Nível</h2>
-    <div class="option-group memory-level-options">
-      <div class="option-card selected" onclick="selectMemoryLevel(5, 'Fácil demais', this)">
-        <h3>🟢 Fácil demais</h3>
-        <p>5 pares</p>
-      </div>
+  <div id="gameScreen" class="screen-card hidden">
+    <h1>Jogo de Tradução</h1>
 
-      <div class="option-card" onclick="selectMemoryLevel(10, 'Fácil', this)">
-        <h3>🟢 Fácil</h3>
-        <p>10 pares</p>
-      </div>
-
-      <div class="option-card" onclick="selectMemoryLevel(20, 'Médio', this)">
-        <h3>🟡 Médio</h3>
-        <p>20 pares</p>
-      </div>
-
-      <div class="option-card" onclick="selectMemoryLevel(30, 'Difícil', this)">
-        <h3>🔴 Difícil</h3>
-        <p>30 pares</p>
-      </div>
-    </div>
-  </div>
-
-  <div class="top-bar" style="margin-top:25px;">
-    <button class="secondary-btn" onclick="goBackFromMemoryMenu()">Voltar</button>
-    <button class="success-btn" onclick="startMemoryGame()">Começar</button>
-  </div>
-</div>
-
-<!-- MENU DIGITAÇÃO -->
-<div id="typingMenu" class="screen-card hidden">
-  <h1>Escrever o Pinyin</h1>
-  <p>Escolha como quer estudar e o nível</p>
-
-  <div class="top-bar">
-    <div class="info-box" id="typingSourceDisplayMenu">Lista: Geral</div>
-  </div>
-
-  <div class="menu-section">
-    <h2>Modo de pergunta</h2>
-    <div class="option-group typing-mode-options">
-      <div class="option-card selected" onclick="selectTypingMode('ideogram_only', this)">
-        <h3>Somente Ideograma</h3>
-        <p>Mostra só o 汉字</p>
-        <p>Ex.: <strong>爱</strong></p>
-      </div>
-
-      <div class="option-card" onclick="selectTypingMode('ideogram_translation', this)">
-        <h3>Ideograma + Tradução</h3>
-        <p>Mostra 汉字 e significado</p>
-        <p>Ex.: <strong>爱 / amor</strong></p>
-      </div>
-    </div>
-  </div>
-
-  <div class="menu-section">
-    <h2>Modo de resposta</h2>
-    <div class="option-group typing-accent-options">
-      <div class="option-card selected" onclick="selectTypingAccentMode('with_accent', this)">
-        <h3>Com acento</h3>
-        <p>Ex.: <strong>ài</strong></p>
-      </div>
-
-      <div class="option-card" onclick="selectTypingAccentMode('without_accent', this)">
-        <h3>Sem acento</h3>
-        <p>Ex.: <strong>ai</strong></p>
-      </div>
-    </div>
-  </div>
-
-  <div class="menu-section">
-    <h2>Nível</h2>
-    <div class="option-group typing-level-options">
-      <div class="option-card selected" onclick="selectTypingLevel(5, 'Fácil demais', this)">
-        <h3>🟢 Fácil demais</h3>
-        <p>5 palavras</p>
-      </div>
-
-      <div class="option-card" onclick="selectTypingLevel(10, 'Fácil', this)">
-        <h3>🟢 Fácil</h3>
-        <p>10 palavras</p>
-      </div>
-
-      <div class="option-card" onclick="selectTypingLevel(20, 'Médio', this)">
-        <h3>🟡 Médio</h3>
-        <p>20 palavras</p>
-      </div>
-
-      <div class="option-card" onclick="selectTypingLevel(30, 'Difícil', this)">
-        <h3>🔴 Difícil</h3>
-        <p>30 palavras</p>
-      </div>
-    </div>
-  </div>
-
-  <div class="top-bar" style="margin-top:25px;">
-    <button class="secondary-btn" onclick="goBackFromTypingMenu()">Voltar</button>
-    <button class="success-btn" onclick="startTypingGame()">Começar</button>
-  </div>
-</div>
-
-<!-- JOGO DA MEMÓRIA -->
-<div id="memoryGameScreen" class="screen-card hidden">
-  <h1>Jogo da Memória</h1>
-
-  <div class="top-bar">
-    <div class="info-box" id="memoryTimer">Tempo: 00:00</div>
-    <div class="info-box" id="memoryPairs">Pares: 0/0</div>
-    <div class="info-box" id="memoryLevelDisplay">Nível: -</div>
-    <div class="info-box" id="memoryModeDisplay">Modo: -</div>
-    <div class="info-box" id="memorySourceDisplayGame">Lista: -</div>
-  </div>
-
-  <div class="top-bar">
-    <button onclick="initMemoryGame()">Reiniciar</button>
-    <button class="secondary-btn" onclick="backToMemoryMenu()">Voltar ao menu</button>
-  </div>
-
-  <div id="memoryBoard" class="grid"></div>
-</div>
-
-<!-- JOGO DE DIGITAR -->
-<div id="typingGameScreen" class="screen-card hidden">
-  <h1>Escrever o Pinyin</h1>
-
-  <div class="top-bar">
-    <div class="info-box" id="typingScore">Acertos: 0</div>
-    <div class="info-box" id="typingProgress">Progresso: 0/0</div>
-    <div class="info-box" id="typingLevelDisplay">Nível: -</div>
-    <div class="info-box" id="typingModeDisplay">Modo: -</div>
-    <div class="info-box" id="typingAccentDisplay">Resposta: -</div>
-    <div class="info-box" id="typingSourceDisplayGame">Lista: -</div>
-  </div>
-
-  <div class="top-bar">
-    <button onclick="restartTypingGame()">Reiniciar</button>
-    <button class="secondary-btn" onclick="backToTypingMenu()">Voltar ao menu</button>
-  </div>
-
-  <div class="quiz-box">
-    <div id="quizIdeogram" class="quiz-ideogram">爱</div>
-    <div id="quizTranslation" class="quiz-translation hidden">amor</div>
-    <div class="quiz-instruction">Digite o pinyin correto:</div>
-
-    <input
-      id="typingInput"
-      class="quiz-input"
-      type="text"
-      placeholder="Digite aqui"
-      autocomplete="off"
-      onkeydown="handleTypingEnter(event)"
-    />
-
-    <div id="typingFeedback" class="feedback"></div>
-    <div id="typingAnswer" class="answer-box"></div>
-
-    <div class="quiz-actions">
-      <button onclick="checkTypingAnswer()">Responder</button>
-      <button class="secondary-btn" onclick="showTypingAnswer()">Mostrar resposta</button>
-      <button class="success-btn" onclick="nextTypingQuestion()">Próxima</button>
+    <div class="top-bar">
+      <div class="info-box" id="progressBox">Progresso: 0/0</div>
+      <div class="info-box" id="scoreBox">Acertos: 0</div>
+      <div class="info-box" id="levelBox">Nível: -</div>
+      <div class="info-box" id="questionModeBox">Modo: -</div>
+      <div class="info-box" id="errorModeBox">Erro: -</div>
     </div>
 
-    <div id="typingExtraProgress" class="progress-text"></div>
+    <div class="top-bar">
+      <button onclick="restartGame()">Reiniciar</button>
+      <button class="secondary-btn" onclick="backToMenu()">Voltar ao menu</button>
+    </div>
+
+    <div class="quiz-box">
+      <div id="quizEmoji" class="quiz-emoji">📘</div>
+      <div id="quizIdeogram" class="quiz-ideogram">爱</div>
+      <div id="quizPinyin" class="quiz-pinyin hidden">ài</div>
+      <div class="quiz-instruction">
+        Digite a tradução em português.<br>
+        O jogo aceita maiúsculas/minúsculas e ignora acentos na sua resposta.
+      </div>
+
+      <input
+        id="translationInput"
+        class="quiz-input"
+        type="text"
+        placeholder="Digite a tradução"
+        autocomplete="off"
+        onkeydown="handleEnter(event)"
+      />
+
+      <div id="feedback" class="feedback"></div>
+      <div id="answerBox" class="answer-box"></div>
+
+      <div class="quiz-actions">
+        <button onclick="checkAnswer()">Responder</button>
+        <button class="secondary-btn" onclick="showAnswer()">Mostrar resposta</button>
+        <button class="success-btn" onclick="nextQuestion()">Próxima</button>
+      </div>
+
+      <div class="small-note" id="smallNote"></div>
+    </div>
   </div>
-</div>
 
 <script>
-/* LISTA GERAL */
 const baseData = [
   { ideogram:'爱',pinyin:'ài',translation:'amor',img:'❤️'},
   { ideogram:'八',pinyin:'bā',translation:'oito',img:'8️⃣'},
@@ -625,98 +327,95 @@ const baseData = [
   { ideogram:'分钟',pinyin:'fēnzhōng',translation:'minuto',img:'⏱️'}
 ];
 
-/* LIVRO DO ALUNO - LISTA ANTIGA */
 const palavrasAntigas = [
-  { hanzi: "您", pinyin: "nín", traducao: "você (formal)", emoji: "🙋‍♂️" },
-  { hanzi: "好", pinyin: "hǎo", traducao: "bom", emoji: "👍" },
-  { hanzi: "贵姓", pinyin: "guìxìng", traducao: "qual é o seu sobrenome?", emoji: "❓" },
-  { hanzi: "姓", pinyin: "xìng", traducao: "sobrenome", emoji: "📝" },
-  { hanzi: "我", pinyin: "wǒ", traducao: "eu", emoji: "🙋" },
-  { hanzi: "呢", pinyin: "ne", traducao: "partícula interrogativa", emoji: "❔" },
-  { hanzi: "是", pinyin: "shì", traducao: "ser", emoji: "✔️" },
-  { hanzi: "人", pinyin: "rén", traducao: "pessoa", emoji: "🧍" },
-  { hanzi: "吗", pinyin: "ma", traducao: "partícula de pergunta", emoji: "❓" },
-  { hanzi: "不", pinyin: "bù", traducao: "não", emoji: "❌" },
-  { hanzi: "同学", pinyin: "tóngxué", traducao: "colega", emoji: "👥" },
-  { hanzi: "们", pinyin: "men", traducao: "plural", emoji: "👫" },
-  { hanzi: "老师", pinyin: "lǎoshī", traducao: "professor", emoji: "👨‍🏫" },
-  { hanzi: "叫", pinyin: "jiào", traducao: "chamar", emoji: "📣" },
-  { hanzi: "你", pinyin: "nǐ", traducao: "você", emoji: "👉" },
-  { hanzi: "什么", pinyin: "shénme", traducao: "o que", emoji: "❓" },
-  { hanzi: "名字", pinyin: "míngzi", traducao: "nome", emoji: "🏷️" },
-  { hanzi: "哪国人", pinyin: "nǎ guó rén", traducao: "de qual país?", emoji: "🌍" },
-  { hanzi: "哪", pinyin: "nǎ", traducao: "qual", emoji: "❓" },
-  { hanzi: "国", pinyin: "guó", traducao: "país", emoji: "🏳️" },
-  { hanzi: "也", pinyin: "yě", traducao: "também", emoji: "➕" },
-  { hanzi: "说", pinyin: "shuō", traducao: "falar", emoji: "🗣️" },
-  { hanzi: "葡萄牙语", pinyin: "pútaoyáyǔ", traducao: "português", emoji: "🇧🇷" },
-  { hanzi: "还是", pinyin: "háishì", traducao: "ou", emoji: "🔀" },
-  { hanzi: "法语", pinyin: "fǎyǔ", traducao: "francês", emoji: "🇫🇷" },
-  { hanzi: "都", pinyin: "dōu", traducao: "todos", emoji: "📊" },
-  { hanzi: "只", pinyin: "zhǐ", traducao: "apenas", emoji: "☝️" },
-  { hanzi: "汉语", pinyin: "hànyǔ", traducao: "chinês", emoji: "🇨🇳" },
-  { hanzi: "他", pinyin: "tā", traducao: "ele", emoji: "👨" },
-  { hanzi: "她", pinyin: "tā", traducao: "ela", emoji: "👩" }
+  { hanzi: '您', pinyin: 'nín', traducao: 'você (formal)', emoji: '🙋‍♂️' },
+  { hanzi: '好', pinyin: 'hǎo', traducao: 'bom', emoji: '👍' },
+  { hanzi: '贵姓', pinyin: 'guìxìng', traducao: 'qual é o seu sobrenome?', emoji: '❓' },
+  { hanzi: '姓', pinyin: 'xìng', traducao: 'sobrenome', emoji: '📝' },
+  { hanzi: '我', pinyin: 'wǒ', traducao: 'eu', emoji: '🙋' },
+  { hanzi: '呢', pinyin: 'ne', traducao: 'partícula interrogativa', emoji: '❔' },
+  { hanzi: '是', pinyin: 'shì', traducao: 'ser', emoji: '✔️' },
+  { hanzi: '人', pinyin: 'rén', traducao: 'pessoa', emoji: '🧍' },
+  { hanzi: '吗', pinyin: 'ma', traducao: 'partícula de pergunta', emoji: '❓' },
+  { hanzi: '不', pinyin: 'bù', traducao: 'não', emoji: '❌' },
+  { hanzi: '同学', pinyin: 'tóngxué', traducao: 'colega', emoji: '👥' },
+  { hanzi: '们', pinyin: 'men', traducao: 'plural', emoji: '👫' },
+  { hanzi: '老师', pinyin: 'lǎoshī', traducao: 'professor', emoji: '👨‍🏫' },
+  { hanzi: '叫', pinyin: 'jiào', traducao: 'chamar', emoji: '📣' },
+  { hanzi: '你', pinyin: 'nǐ', traducao: 'você', emoji: '👉' },
+  { hanzi: '什么', pinyin: 'shénme', traducao: 'o que', emoji: '❓' },
+  { hanzi: '名字', pinyin: 'míngzi', traducao: 'nome', emoji: '🏷️' },
+  { hanzi: '哪国人', pinyin: 'nǎ guó rén', traducao: 'de qual país?', emoji: '🌍' },
+  { hanzi: '哪', pinyin: 'nǎ', traducao: 'qual', emoji: '❓' },
+  { hanzi: '国', pinyin: 'guó', traducao: 'país', emoji: '🏳️' },
+  { hanzi: '也', pinyin: 'yě', traducao: 'também', emoji: '➕' },
+  { hanzi: '说', pinyin: 'shuō', traducao: 'falar', emoji: '🗣️' },
+  { hanzi: '葡萄牙语', pinyin: 'pútaoyáyǔ', traducao: 'português', emoji: '🇧🇷' },
+  { hanzi: '还是', pinyin: 'háishì', traducao: 'ou', emoji: '🔀' },
+  { hanzi: '法语', pinyin: 'fǎyǔ', traducao: 'francês', emoji: '🇫🇷' },
+  { hanzi: '都', pinyin: 'dōu', traducao: 'todos', emoji: '📊' },
+  { hanzi: '只', pinyin: 'zhǐ', traducao: 'apenas', emoji: '☝️' },
+  { hanzi: '汉语', pinyin: 'hànyǔ', traducao: 'chinês', emoji: '🇨🇳' },
+  { hanzi: '他', pinyin: 'tā', traducao: 'ele', emoji: '👨' },
+  { hanzi: '她', pinyin: 'tā', traducao: 'ela', emoji: '👩' }
 ];
 
-/* LIVRO DO ALUNO - LISTA NOVA */
 const palavrasNovas = [
-  { hanzi: "中学", pinyin: "zhōngxué", traducao: "escola secundária", emoji: "🏫" },
-  { hanzi: "小学", pinyin: "xiǎoxué", traducao: "escola primária", emoji: "🏫" },
-  { hanzi: "电脑", pinyin: "diànnǎo", traducao: "computador", emoji: "💻" },
-  { hanzi: "饮料", pinyin: "yǐnliào", traducao: "bebida", emoji: "🥤" },
-  { hanzi: "水", pinyin: "shuǐ", traducao: "água", emoji: "💧" },
-  { hanzi: "橙汁", pinyin: "chéngzhī", traducao: "suco de laranja", emoji: "🍊" },
-  { hanzi: "可口可乐", pinyin: "kěkǒukělè", traducao: "coca-cola", emoji: "🥤" },
-  { hanzi: "咖啡", pinyin: "kāfēi", traducao: "café", emoji: "☕" },
-  { hanzi: "亚洲", pinyin: "Yàzhōu", traducao: "Ásia", emoji: "🌏" },
-  { hanzi: "欧洲", pinyin: "Ōuzhōu", traducao: "Europa", emoji: "🌍" },
-  { hanzi: "美洲", pinyin: "Měizhōu", traducao: "América", emoji: "🌎" },
-  { hanzi: "大洋洲", pinyin: "Dàyángzhōu", traducao: "Oceania", emoji: "🌊" },
-  { hanzi: "非洲", pinyin: "Fēizhōu", traducao: "África", emoji: "🌍" },
-  { hanzi: "西方", pinyin: "xīfāng", traducao: "ocidente", emoji: "🌇" },
-  { hanzi: "东方", pinyin: "dōngfāng", traducao: "oriente", emoji: "🌅" },
-  { hanzi: "地方", pinyin: "dìfang", traducao: "lugar", emoji: "📍" },
-  { hanzi: "个", pinyin: "gè", traducao: "classificador", emoji: "🔢" },
-  { hanzi: "这儿", pinyin: "zhèr", traducao: "aqui", emoji: "📌" },
-  { hanzi: "家", pinyin: "jiā", traducao: "casa/família", emoji: "🏠" },
-  { hanzi: "有", pinyin: "yǒu", traducao: "ter", emoji: "✔️" },
-  { hanzi: "几", pinyin: "jǐ", traducao: "quantos", emoji: "❓" },
-  { hanzi: "口", pinyin: "kǒu", traducao: "classificador pessoas", emoji: "👥" },
-  { hanzi: "爸爸", pinyin: "bàba", traducao: "pai", emoji: "👨" },
-  { hanzi: "妈妈", pinyin: "māma", traducao: "mãe", emoji: "👩" },
-  { hanzi: "和", pinyin: "hé", traducao: "e", emoji: "➕" },
-  { hanzi: "太太", pinyin: "tàitai", traducao: "esposa", emoji: "👩" },
-  { hanzi: "孩子", pinyin: "háizi", traducao: "criança", emoji: "👶" },
-  { hanzi: "男孩儿", pinyin: "nánháir", traducao: "menino", emoji: "👦" },
-  { hanzi: "女孩儿", pinyin: "nǚháir", traducao: "menina", emoji: "👧" },
-  { hanzi: "多大", pinyin: "duō dà", traducao: "quantos anos", emoji: "🎂" },
-  { hanzi: "两", pinyin: "liǎng", traducao: "dois", emoji: "2️⃣" },
-  { hanzi: "岁", pinyin: "suì", traducao: "anos (idade)", emoji: "🎂" },
-  { hanzi: "可爱", pinyin: "kě’ài", traducao: "fofo", emoji: "🥰" },
-  { hanzi: "吧", pinyin: "ba", traducao: "partícula", emoji: "💬" },
-  { hanzi: "学校", pinyin: "xuéxiào", traducao: "escola", emoji: "🏫" },
-  { hanzi: "多少", pinyin: "duōshao", traducao: "quantos", emoji: "❓" },
-  { hanzi: "学生", pinyin: "xuéshēng", traducao: "aluno", emoji: "🎓" },
-  { hanzi: "想", pinyin: "xiǎng", traducao: "pensar", emoji: "🤔" },
-  { hanzi: "大概", pinyin: "dàgài", traducao: "aproximadamente", emoji: "📊" },
-  { hanzi: "万", pinyin: "wàn", traducao: "dez mil", emoji: "🔟" },
-  { hanzi: "没有", pinyin: "méiyǒu", traducao: "não ter", emoji: "❌" },
-  { hanzi: "多", pinyin: "duō", traducao: "muito", emoji: "📈" },
-  { hanzi: "千", pinyin: "qiān", traducao: "mil", emoji: "💯" },
-  { hanzi: "去", pinyin: "qù", traducao: "ir", emoji: "➡️" },
-  { hanzi: "为什么", pinyin: "wèi shénme", traducao: "por quê", emoji: "❓" },
-  { hanzi: "为", pinyin: "wèi", traducao: "para", emoji: "➡️" },
-  { hanzi: "分公司", pinyin: "fēn gōngsī", traducao: "filial", emoji: "🏢" },
-  { hanzi: "老板", pinyin: "lǎobǎn", traducao: "chefe", emoji: "👔" },
-  { hanzi: "让", pinyin: "ràng", traducao: "deixar/permitir", emoji: "✔️" },
-  { hanzi: "那儿", pinyin: "nàr", traducao: "lá", emoji: "📍" },
-  { hanzi: "百", pinyin: "bǎi", traducao: "cem", emoji: "💯" },
-  { hanzi: "少", pinyin: "shǎo", traducao: "pouco", emoji: "📉" },
-  { hanzi: "因为", pinyin: "yīnwèi", traducao: "porque", emoji: "🔗" }
+  { hanzi: '中学', pinyin: 'zhōngxué', traducao: 'escola secundária', emoji: '🏫' },
+  { hanzi: '小学', pinyin: 'xiǎoxué', traducao: 'escola primária', emoji: '🏫' },
+  { hanzi: '电脑', pinyin: 'diànnǎo', traducao: 'computador', emoji: '💻' },
+  { hanzi: '饮料', pinyin: 'yǐnliào', traducao: 'bebida', emoji: '🥤' },
+  { hanzi: '水', pinyin: 'shuǐ', traducao: 'água', emoji: '💧' },
+  { hanzi: '橙汁', pinyin: 'chéngzhī', traducao: 'suco de laranja', emoji: '🍊' },
+  { hanzi: '可口可乐', pinyin: 'kěkǒukělè', traducao: 'coca-cola', emoji: '🥤' },
+  { hanzi: '咖啡', pinyin: 'kāfēi', traducao: 'café', emoji: '☕' },
+  { hanzi: '亚洲', pinyin: 'Yàzhōu', traducao: 'Ásia', emoji: '🌏' },
+  { hanzi: '欧洲', pinyin: 'Ōuzhōu', traducao: 'Europa', emoji: '🌍' },
+  { hanzi: '美洲', pinyin: 'Měizhōu', traducao: 'América', emoji: '🌎' },
+  { hanzi: '大洋洲', pinyin: 'Dàyángzhōu', traducao: 'Oceania', emoji: '🌊' },
+  { hanzi: '非洲', pinyin: 'Fēizhōu', traducao: 'África', emoji: '🌍' },
+  { hanzi: '西方', pinyin: 'xīfāng', traducao: 'ocidente', emoji: '🌇' },
+  { hanzi: '东方', pinyin: 'dōngfāng', traducao: 'oriente', emoji: '🌅' },
+  { hanzi: '地方', pinyin: 'dìfang', traducao: 'lugar', emoji: '📍' },
+  { hanzi: '个', pinyin: 'gè', traducao: 'classificador', emoji: '🔢' },
+  { hanzi: '这儿', pinyin: 'zhèr', traducao: 'aqui', emoji: '📌' },
+  { hanzi: '家', pinyin: 'jiā', traducao: 'casa/família', emoji: '🏠' },
+  { hanzi: '有', pinyin: 'yǒu', traducao: 'ter', emoji: '✔️' },
+  { hanzi: '几', pinyin: 'jǐ', traducao: 'quantos', emoji: '❓' },
+  { hanzi: '口', pinyin: 'kǒu', traducao: 'classificador pessoas', emoji: '👥' },
+  { hanzi: '爸爸', pinyin: 'bàba', traducao: 'pai', emoji: '👨' },
+  { hanzi: '妈妈', pinyin: 'māma', traducao: 'mãe', emoji: '👩' },
+  { hanzi: '和', pinyin: 'hé', traducao: 'e', emoji: '➕' },
+  { hanzi: '太太', pinyin: 'tàitai', traducao: 'esposa', emoji: '👩' },
+  { hanzi: '孩子', pinyin: 'háizi', traducao: 'criança', emoji: '👶' },
+  { hanzi: '男孩儿', pinyin: 'nánháir', traducao: 'menino', emoji: '👦' },
+  { hanzi: '女孩儿', pinyin: 'nǚháir', traducao: 'menina', emoji: '👧' },
+  { hanzi: '多大', pinyin: 'duō dà', traducao: 'quantos anos', emoji: '🎂' },
+  { hanzi: '两', pinyin: 'liǎng', traducao: 'dois', emoji: '2️⃣' },
+  { hanzi: '岁', pinyin: 'suì', traducao: 'anos (idade)', emoji: '🎂' },
+  { hanzi: '可爱', pinyin: 'kě’ài', traducao: 'fofo', emoji: '🥰' },
+  { hanzi: '吧', pinyin: 'ba', traducao: 'partícula', emoji: '💬' },
+  { hanzi: '学校', pinyin: 'xuéxiào', traducao: 'escola', emoji: '🏫' },
+  { hanzi: '多少', pinyin: 'duōshao', traducao: 'quantos', emoji: '❓' },
+  { hanzi: '学生', pinyin: 'xuéshēng', traducao: 'aluno', emoji: '🎓' },
+  { hanzi: '想', pinyin: 'xiǎng', traducao: 'pensar', emoji: '🤔' },
+  { hanzi: '大概', pinyin: 'dàgài', traducao: 'aproximadamente', emoji: '📊' },
+  { hanzi: '万', pinyin: 'wàn', traducao: 'dez mil', emoji: '🔟' },
+  { hanzi: '没有', pinyin: 'méiyǒu', traducao: 'não ter', emoji: '❌' },
+  { hanzi: '多', pinyin: 'duō', traducao: 'muito', emoji: '📈' },
+  { hanzi: '千', pinyin: 'qiān', traducao: 'mil', emoji: '💯' },
+  { hanzi: '去', pinyin: 'qù', traducao: 'ir', emoji: '➡️' },
+  { hanzi: '为什么', pinyin: 'wèi shénme', traducao: 'por quê', emoji: '❓' },
+  { hanzi: '为', pinyin: 'wèi', traducao: 'para', emoji: '➡️' },
+  { hanzi: '分公司', pinyin: 'fēn gōngsī', traducao: 'filial', emoji: '🏢' },
+  { hanzi: '老板', pinyin: 'lǎobǎn', traducao: 'chefe', emoji: '👔' },
+  { hanzi: '让', pinyin: 'ràng', traducao: 'deixar/permitir', emoji: '✔️' },
+  { hanzi: '那儿', pinyin: 'nàr', traducao: 'lá', emoji: '📍' },
+  { hanzi: '百', pinyin: 'bǎi', traducao: 'cem', emoji: '💯' },
+  { hanzi: '少', pinyin: 'shǎo', traducao: 'pouco', emoji: '📉' },
+  { hanzi: '因为', pinyin: 'yīnwèi', traducao: 'porque', emoji: '🔗' }
 ];
 
-/* NORMALIZAÇÃO */
 function normalizeWord(item) {
   return {
     ideogram: item.ideogram || item.hanzi || '',
@@ -726,599 +425,286 @@ function normalizeWord(item) {
   };
 }
 
-const normalizedBaseData = baseData.map(normalizeWord);
-const normalizedStudentData = [...palavrasAntigas, ...palavrasNovas].map(normalizeWord);
-
-/* CONTROLE DE FONTE */
-let currentSource = 'base';
-
-function getCurrentData() {
-  return currentSource === 'student' ? normalizedStudentData : normalizedBaseData;
+function normalizeText(text) {
+  return (text || '')
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[’']/g, '')
+    .replace(/[()?/.,!;:]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
 }
 
-function getCurrentSourceName() {
-  return currentSource === 'student' ? 'Livro do Aluno' : 'Geral';
-}
+function buildAcceptedAnswers(text) {
+  const parts = (text || '')
+    .split(/[\/]/)
+    .map(part => part.trim())
+    .filter(Boolean);
 
-function setGameSource(source) {
-  currentSource = source;
-  updateSourceDisplays();
-  updateLevelTexts();
-}
+  if (parts.length === 0) parts.push(text);
 
-function getMemoryLevelLimit() {
-  if (currentSource === 'student') {
-    if (memoryLevelName === 'Fácil demais') return 10;
-    if (memoryLevelName === 'Fácil') return 28;
-    if (memoryLevelName === 'Médio') return 56;
-    return 83;
-  }
+  const answers = new Set();
+  parts.forEach(part => {
+    answers.add(normalizeText(part));
 
-  if (memoryLevelName === 'Fácil demais') return 5;
-  if (memoryLevelName === 'Fácil') return 10;
-  if (memoryLevelName === 'Médio') return 20;
-  return 30;
-}
+    if (part.includes('(') && part.includes(')')) {
+      answers.add(normalizeText(part.replace(/\([^)]*\)/g, '').trim()));
+    }
 
-function getTypingLevelLimit() {
-  if (currentSource === 'student') {
-    if (typingLevelName === 'Fácil demais') return 10;
-    if (typingLevelName === 'Fácil') return 28;
-    if (typingLevelName === 'Médio') return 56;
-    return 83;
-  }
-
-  if (typingLevelName === 'Fácil demais') return 5;
-  if (typingLevelName === 'Fácil') return 10;
-  if (typingLevelName === 'Médio') return 20;
-  return 30;
-}
-
-function updateLevelTexts() {
-  const memoryCards = document.querySelectorAll('.memory-level-options .option-card p');
-  const typingCards = document.querySelectorAll('.typing-level-options .option-card p');
-
-  if (currentSource === 'student') {
-    memoryCards[0].innerText = '10 pares';
-    memoryCards[1].innerText = '28 pares';
-    memoryCards[2].innerText = '56 pares';
-    memoryCards[3].innerText = '83 pares';
-
-    typingCards[0].innerText = '10 palavras';
-    typingCards[1].innerText = '28 palavras';
-    typingCards[2].innerText = '56 palavras';
-    typingCards[3].innerText = '83 palavras';
-  } else {
-    memoryCards[0].innerText = '5 pares';
-    memoryCards[1].innerText = '10 pares';
-    memoryCards[2].innerText = '20 pares';
-    memoryCards[3].innerText = '30 pares';
-
-    typingCards[0].innerText = '5 palavras';
-    typingCards[1].innerText = '10 palavras';
-    typingCards[2].innerText = '20 palavras';
-    typingCards[3].innerText = '30 palavras';
-  }
-}
-
-function updateSourceDisplays() {
-  const sourceName = getCurrentSourceName();
-  document.getElementById('memorySourceDisplayMenu').innerText = `Lista: ${sourceName}`;
-  document.getElementById('typingSourceDisplayMenu').innerText = `Lista: ${sourceName}`;
-  document.getElementById('memorySourceDisplayGame').innerText = `Lista: ${sourceName}`;
-  document.getElementById('typingSourceDisplayGame').innerText = `Lista: ${sourceName}`;
-}
-
-/* TELAS */
-const mainMenu = document.getElementById('mainMenu');
-const studentBookScreen = document.getElementById('studentBookScreen');
-const memoryMenu = document.getElementById('memoryMenu');
-const typingMenu = document.getElementById('typingMenu');
-const memoryGameScreen = document.getElementById('memoryGameScreen');
-const typingGameScreen = document.getElementById('typingGameScreen');
-
-function hideAllScreens() {
-  mainMenu.classList.add('hidden');
-  studentBookScreen.classList.add('hidden');
-  memoryMenu.classList.add('hidden');
-  typingMenu.classList.add('hidden');
-  memoryGameScreen.classList.add('hidden');
-  typingGameScreen.classList.add('hidden');
-}
-
-function goToMainMenu() {
-  clearInterval(memoryInterval);
-  hideAllScreens();
-  mainMenu.classList.remove('hidden');
-}
-
-function openStudentBook() {
-  setGameSource('student');
-  renderStudentWordList();
-  hideAllScreens();
-  studentBookScreen.classList.remove('hidden');
-}
-
-function toggleStudentWordList() {
-  const list = document.getElementById('studentWordList');
-  list.classList.toggle('hidden');
-}
-
-function renderStudentWordList() {
-  const list = document.getElementById('studentWordList');
-  list.innerHTML = '';
-  document.getElementById('studentWordCount').innerText = `Total: ${normalizedStudentData.length} palavras`;
-
-  normalizedStudentData.forEach(item => {
-    const div = document.createElement('div');
-    div.className = 'word-item';
-    div.innerHTML = `
-      <div class="hanzi">${item.ideogram}</div>
-      <div class="word-pinyin">${item.pinyin}</div>
-      <div class="word-translation">${item.translation}</div>
-      <div class="word-emoji">${item.img}</div>
-    `;
-    list.appendChild(div);
+    if (part.includes('/')) {
+      part.split('/').forEach(p => answers.add(normalizeText(p)));
+    }
   });
 
-  list.classList.remove('hidden');
+  return Array.from(answers).filter(Boolean);
 }
 
-function openMemoryMenu() {
-  updateSourceDisplays();
-  updateLevelTexts();
-  hideAllScreens();
-  memoryMenu.classList.remove('hidden');
-}
+const mergedRawData = [
+  ...baseData.map(normalizeWord),
+  ...palavrasAntigas.map(normalizeWord),
+  ...palavrasNovas.map(normalizeWord)
+];
 
-function openTypingMenu() {
-  updateSourceDisplays();
-  updateLevelTexts();
-  hideAllScreens();
-  typingMenu.classList.remove('hidden');
-}
-
-function openMemoryMenuFromStudent() {
-  setGameSource('student');
-  openMemoryMenu();
-}
-
-function openTypingMenuFromStudent() {
-  setGameSource('student');
-  openTypingMenu();
-}
-
-function goBackFromMemoryMenu() {
-  hideAllScreens();
-  if (currentSource === 'student') {
-    studentBookScreen.classList.remove('hidden');
-  } else {
-    mainMenu.classList.remove('hidden');
+const uniqueMap = new Map();
+mergedRawData.forEach(item => {
+  if (!item.ideogram) return;
+  if (!uniqueMap.has(item.ideogram)) {
+    uniqueMap.set(item.ideogram, item);
+    return;
   }
-}
 
-function goBackFromTypingMenu() {
-  hideAllScreens();
-  if (currentSource === 'student') {
-    studentBookScreen.classList.remove('hidden');
-  } else {
-    mainMenu.classList.remove('hidden');
+  const current = uniqueMap.get(item.ideogram);
+  if ((!current.translation || current.translation.length < item.translation.length) && item.translation) {
+    uniqueMap.set(item.ideogram, item);
   }
-}
+});
 
-/* =========================
-   JOGO DA MEMÓRIA
-========================= */
-let memoryLevel = 5;
-let memoryLevelName = 'Fácil demais';
-let memoryMode = 'pinyin';
-let memoryModeName = 'Ideograma + Pinyin';
+const allWords = Array.from(uniqueMap.values()).map(item => ({
+  ...item,
+  acceptedAnswers: buildAcceptedAnswers(item.translation)
+}));
 
-let memoryCards = [];
-let memoryShuffled = [];
-let memoryFirst = null;
-let memorySecond = null;
-let memoryLock = false;
-let memoryPairsCount = 0;
-let memoryTime = 0;
-let memoryInterval = null;
+let selectedQuestionMode = 'ideogram_only';
+let selectedQuestionModeName = 'Somente ideograma';
+let selectedLevel = 15;
+let selectedLevelName = 'Fácil';
+let selectedErrorMode = 'continue';
+let selectedErrorModeName = 'Continuar';
 
-const memoryBoard = document.getElementById('memoryBoard');
+let gameWords = [];
+let currentIndex = 0;
+let score = 0;
+let answered = false;
 
-function selectMemoryMode(mode, element) {
-  memoryMode = mode;
-  memoryModeName = mode === 'pinyin'
-    ? 'Ideograma + Pinyin'
-    : 'Ideograma + Tradução + Pinyin';
-
-  document.querySelectorAll('.memory-mode-options .option-card').forEach(card => {
-    card.classList.remove('selected');
-  });
-  element.classList.add('selected');
-}
-
-function selectMemoryLevel(level, levelName, element) {
-  memoryLevel = level;
-  memoryLevelName = levelName;
-
-  document.querySelectorAll('.memory-level-options .option-card').forEach(card => {
-    card.classList.remove('selected');
-  });
-  element.classList.add('selected');
-}
-
-function startMemoryGame() {
-  hideAllScreens();
-  memoryGameScreen.classList.remove('hidden');
-  initMemoryGame();
-}
-
-function backToMemoryMenu() {
-  clearInterval(memoryInterval);
-  hideAllScreens();
-  memoryMenu.classList.remove('hidden');
-}
+const menuScreen = document.getElementById('menuScreen');
+const gameScreen = document.getElementById('gameScreen');
+const quizIdeogram = document.getElementById('quizIdeogram');
+const quizPinyin = document.getElementById('quizPinyin');
+const quizEmoji = document.getElementById('quizEmoji');
+const translationInput = document.getElementById('translationInput');
+const feedback = document.getElementById('feedback');
+const answerBox = document.getElementById('answerBox');
+const progressBox = document.getElementById('progressBox');
+const scoreBox = document.getElementById('scoreBox');
+const levelBox = document.getElementById('levelBox');
+const questionModeBox = document.getElementById('questionModeBox');
+const errorModeBox = document.getElementById('errorModeBox');
+const smallNote = document.getElementById('smallNote');
 
 function shuffleArray(arr) {
   return [...arr].sort(() => Math.random() - 0.5);
 }
 
-function startMemoryTimer() {
-  clearInterval(memoryInterval);
-  memoryTime = 0;
-  memoryInterval = setInterval(() => {
-    memoryTime++;
-    let m = Math.floor(memoryTime / 60);
-    let s = memoryTime % 60;
-    document.getElementById('memoryTimer').innerText =
-      `Tempo: ${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
-  }, 1000);
-}
-
-function revealMemoryCard(el, card) {
-  if (card.type === 'ideogram') {
-    el.innerHTML = `<div class="ideogram">${card.value}</div>`;
-  } else {
-    if (memoryMode === 'pinyin') {
-      el.innerHTML = `
-        <div class="card-content">
-          <div class="pinyin">${card.data.pinyin}</div>
-        </div>
-      `;
-    } else {
-      el.innerHTML = `
-        <div class="card-content">
-          <div class="emoji">${card.data.img}</div>
-          <div class="pinyin">${card.data.pinyin}</div>
-          <div class="translation">${card.data.translation}</div>
-        </div>
-      `;
-    }
-  }
-}
-
-function resetMemorySelection() {
-  memoryFirst = null;
-  memorySecond = null;
-  memoryLock = false;
-}
-
-function createMemoryCard(card, i) {
-  const el = document.createElement('div');
-  el.className = 'card';
-  el.innerHTML = '❓';
-  el.dataset.index = i;
-
-  el.onclick = () => {
-    if (memoryLock || el === memoryFirst || el.classList.contains('matched')) return;
-
-    revealMemoryCard(el, card);
-
-    if (!memoryFirst) {
-      memoryFirst = el;
-      return;
-    }
-
-    memorySecond = el;
-    memoryLock = true;
-
-    const a = memoryShuffled[memoryFirst.dataset.index];
-    const b = memoryShuffled[memorySecond.dataset.index];
-
-    if (a.pairId === b.pairId && a.type !== b.type) {
-      memoryFirst.classList.add('matched');
-      memorySecond.classList.add('matched');
-      memoryPairsCount++;
-
-      document.getElementById('memoryPairs').innerText =
-        `Pares: ${memoryPairsCount}/${Math.min(getMemoryLevelLimit(), getCurrentData().length)}`;
-
-      resetMemorySelection();
-
-      if (memoryPairsCount === Math.min(getMemoryLevelLimit(), getCurrentData().length)) {
-        clearInterval(memoryInterval);
-        setTimeout(() => {
-          alert(`🎉 Você ganhou no nível ${memoryLevelName} (${memoryModeName}) usando a lista ${getCurrentSourceName()} em ${memoryTime} segundos!`);
-        }, 300);
-      }
-    } else {
-      setTimeout(() => {
-        memoryFirst.innerHTML = '❓';
-        memorySecond.innerHTML = '❓';
-        resetMemorySelection();
-      }, 800);
-    }
-  };
-
-  return el;
-}
-
-function initMemoryGame() {
-  memoryBoard.innerHTML = '';
-  memoryPairsCount = 0;
-  memoryFirst = null;
-  memorySecond = null;
-  memoryLock = false;
-
-  const currentData = getCurrentData();
-  const levelLimit = Math.min(getMemoryLevelLimit(), currentData.length);
-  const selectedData = currentData.slice(0, levelLimit);
-
-  document.getElementById('memoryPairs').innerText = `Pares: 0/${selectedData.length}`;
-  document.getElementById('memoryLevelDisplay').innerText = `Nível: ${memoryLevelName}`;
-  document.getElementById('memoryModeDisplay').innerText = `Modo: ${memoryModeName}`;
-  document.getElementById('memorySourceDisplayGame').innerText = `Lista: ${getCurrentSourceName()}`;
-
-  memoryCards = [];
-
-  selectedData.forEach((item, i) => {
-    memoryCards.push({ type: 'ideogram', pairId: i, value: item.ideogram });
-    memoryCards.push({ type: 'info', pairId: i, data: item });
-  });
-
-  memoryShuffled = shuffleArray(memoryCards);
-
-  memoryShuffled.forEach((card, i) => {
-    memoryBoard.appendChild(createMemoryCard(card, i));
-  });
-
-  startMemoryTimer();
-}
-
-/* =========================
-   JOGO DE DIGITAR PINYIN
-========================= */
-let typingLevel = 5;
-let typingLevelName = 'Fácil demais';
-let typingMode = 'ideogram_only';
-let typingModeName = 'Somente Ideograma';
-let typingAccentMode = 'with_accent';
-let typingAccentModeName = 'Com acento';
-
-let typingQuestions = [];
-let typingIndex = 0;
-let typingScore = 0;
-let typingAnswered = false;
-let typingGameOver = false;
-
-const quizIdeogram = document.getElementById('quizIdeogram');
-const quizTranslation = document.getElementById('quizTranslation');
-const typingInput = document.getElementById('typingInput');
-const typingFeedback = document.getElementById('typingFeedback');
-const typingAnswer = document.getElementById('typingAnswer');
-
-function selectTypingMode(mode, element) {
-  typingMode = mode;
-  typingModeName = mode === 'ideogram_only'
-    ? 'Somente Ideograma'
-    : 'Ideograma + Tradução';
-
-  document.querySelectorAll('.typing-mode-options .option-card').forEach(card => {
-    card.classList.remove('selected');
-  });
+function selectQuestionMode(mode, element) {
+  selectedQuestionMode = mode;
+  selectedQuestionModeName = mode === 'ideogram_only' ? 'Somente ideograma' : 'Ideograma + pinyin';
+  document.querySelectorAll('.question-mode-options .option-card').forEach(card => card.classList.remove('selected'));
   element.classList.add('selected');
 }
 
-function selectTypingAccentMode(mode, element) {
-  typingAccentMode = mode;
-  typingAccentModeName = mode === 'with_accent'
-    ? 'Com acento'
-    : 'Sem acento';
-
-  document.querySelectorAll('.typing-accent-options .option-card').forEach(card => {
-    card.classList.remove('selected');
-  });
+function selectLevel(level, name, element) {
+  selectedLevel = level;
+  selectedLevelName = name;
+  document.querySelectorAll('.level-options .option-card').forEach(card => card.classList.remove('selected'));
   element.classList.add('selected');
 }
 
-function selectTypingLevel(level, levelName, element) {
-  typingLevel = level;
-  typingLevelName = levelName;
-
-  document.querySelectorAll('.typing-level-options .option-card').forEach(card => {
-    card.classList.remove('selected');
-  });
+function selectErrorMode(mode, element) {
+  selectedErrorMode = mode;
+  selectedErrorModeName = mode === 'continue' ? 'Continuar' : 'Voltar do zero';
+  document.querySelectorAll('.error-mode-options .option-card').forEach(card => card.classList.remove('selected'));
   element.classList.add('selected');
 }
 
-function startTypingGame() {
-  hideAllScreens();
-  typingGameScreen.classList.remove('hidden');
-  restartTypingGame();
+function getLevelLimit() {
+  if (selectedLevel === 'all') return allWords.length;
+  return Math.min(selectedLevel, allWords.length);
 }
 
-function backToTypingMenu() {
-  hideAllScreens();
-  typingMenu.classList.remove('hidden');
+function updateTopBar() {
+  progressBox.innerText = `Progresso: ${currentIndex}/${gameWords.length}`;
+  scoreBox.innerText = `Acertos: ${score}`;
+  levelBox.innerText = `Nível: ${selectedLevelName}`;
+  questionModeBox.innerText = `Modo: ${selectedQuestionModeName}`;
+  errorModeBox.innerText = `Erro: ${selectedErrorModeName}`;
+  smallNote.innerText = `Banco total do jogo: ${allWords.length} ideogramas únicos.`;
 }
 
-function restartTypingGame() {
-  const currentData = getCurrentData();
-  const levelLimit = Math.min(getTypingLevelLimit(), currentData.length);
-
-  typingQuestions = shuffleArray([...currentData.slice(0, levelLimit)]);
-  typingIndex = 0;
-  typingScore = 0;
-  typingAnswered = false;
-  typingGameOver = false;
-
-  document.getElementById('typingLevelDisplay').innerText = `Nível: ${typingLevelName}`;
-  document.getElementById('typingModeDisplay').innerText = `Modo: ${typingModeName}`;
-  document.getElementById('typingAccentDisplay').innerText = `Resposta: ${typingAccentModeName}`;
-  document.getElementById('typingScore').innerText = `Acertos: ${typingScore}`;
-  document.getElementById('typingSourceDisplayGame').innerText = `Lista: ${getCurrentSourceName()}`;
-
-  loadTypingQuestion();
-}
-
-function loadTypingQuestion() {
-  if (typingIndex >= typingQuestions.length) {
-    quizIdeogram.innerText = '🎉';
-    quizTranslation.classList.add('hidden');
-    quizTranslation.innerText = '';
-    typingInput.value = '';
-    typingInput.disabled = true;
-    typingFeedback.className = 'feedback correct';
-    typingFeedback.innerText = `Parabéns! Você completou o nível ${typingLevelName} com ${typingScore} acertos.`;
-    typingAnswer.innerHTML = '';
-    document.getElementById('typingProgress').innerText = `Progresso: ${typingQuestions.length}/${typingQuestions.length}`;
-    document.getElementById('typingExtraProgress').innerText = 'Clique em Reiniciar para jogar novamente.';
-    typingGameOver = true;
+function renderQuestion() {
+  const item = gameWords[currentIndex];
+  if (!item) {
+    feedback.className = 'feedback correct';
+    feedback.innerText = '🎉 Você terminou este ciclo!';
+    answerBox.innerHTML = `Total de acertos: <strong>${score}/${gameWords.length}</strong><br>Você pode reiniciar para jogar de novo com outra ordem.`;
+    quizIdeogram.innerText = '完成';
+    quizEmoji.innerText = '🏆';
+    quizPinyin.classList.add('hidden');
+    translationInput.value = '';
+    translationInput.disabled = true;
+    updateTopBar();
     return;
   }
 
-  const current = typingQuestions[typingIndex];
+  quizIdeogram.innerText = item.ideogram;
+  quizEmoji.innerText = item.img || '📘';
+  quizPinyin.innerText = item.pinyin;
+  answerBox.innerHTML = '';
+  feedback.innerText = '';
+  feedback.className = 'feedback';
+  translationInput.value = '';
+  translationInput.disabled = false;
+  answered = false;
 
-  quizIdeogram.innerText = current.ideogram;
-
-  if (typingMode === 'ideogram_translation') {
-    quizTranslation.classList.remove('hidden');
-    quizTranslation.innerText = current.translation;
+  if (selectedQuestionMode === 'ideogram_pinyin') {
+    quizPinyin.classList.remove('hidden');
   } else {
-    quizTranslation.classList.add('hidden');
-    quizTranslation.innerText = '';
+    quizPinyin.classList.add('hidden');
   }
 
-  typingInput.disabled = false;
-  typingInput.value = '';
-  typingInput.focus();
-
-  typingFeedback.innerText = '';
-  typingFeedback.className = 'feedback';
-  typingAnswer.innerHTML = '';
-  typingAnswered = false;
-
-  document.getElementById('typingProgress').innerText = `Progresso: ${typingIndex + 1}/${typingQuestions.length}`;
-  document.getElementById('typingExtraProgress').innerText = '';
+  updateTopBar();
+  translationInput.focus();
 }
 
-function normalizeText(text) {
-  return text
-    .trim()
-    .toLowerCase()
-    .replace(/\s+/g, ' ');
+function startGame() {
+  const limit = getLevelLimit();
+  gameWords = shuffleArray(allWords).slice(0, limit);
+  currentIndex = 0;
+  score = 0;
+  menuScreen.classList.add('hidden');
+  gameScreen.classList.remove('hidden');
+  renderQuestion();
 }
 
-function removePinyinTones(text) {
-  const map = {
-    'ā':'a','á':'a','ǎ':'a','à':'a',
-    'ē':'e','é':'e','ě':'e','è':'e',
-    'ī':'i','í':'i','ǐ':'i','ì':'i',
-    'ō':'o','ó':'o','ǒ':'o','ò':'o',
-    'ū':'u','ú':'u','ǔ':'u','ù':'u',
-    'ǖ':'ü','ǘ':'ü','ǚ':'ü','ǜ':'ü',
-    'ü':'u'
-  };
-
-  return text
-    .split('')
-    .map(char => map[char] || char)
-    .join('');
+function restartGame() {
+  const limit = getLevelLimit();
+  gameWords = shuffleArray(allWords).slice(0, limit);
+  currentIndex = 0;
+  score = 0;
+  renderQuestion();
 }
 
-function getExpectedAnswer(pinyin) {
-  if (typingAccentMode === 'with_accent') {
-    return normalizeText(pinyin);
+function backToMenu() {
+  gameScreen.classList.add('hidden');
+  menuScreen.classList.remove('hidden');
+}
+
+function isCorrectAnswer(userAnswer, acceptedAnswers) {
+  const normalizedUser = normalizeText(userAnswer);
+  return acceptedAnswers.includes(normalizedUser);
+}
+
+function showCurrentAnswer(correct, userAnswer = '') {
+  const item = gameWords[currentIndex];
+  if (!item) return;
+
+  answerBox.innerHTML = `
+    <strong>Ideograma:</strong> ${item.ideogram}<br>
+    <strong>Pinyin:</strong> ${item.pinyin}<br>
+    <strong>Tradução correta:</strong> ${item.translation}
+    ${userAnswer ? `<br><strong>Sua resposta:</strong> ${userAnswer}` : ''}
+  `;
+
+  feedback.className = correct ? 'feedback correct' : 'feedback wrong';
+  feedback.innerText = correct ? '✅ Correto!' : '❌ Resposta incorreta';
+}
+
+function resetProgressAfterError() {
+  const limit = getLevelLimit();
+  gameWords = shuffleArray(allWords).slice(0, limit);
+  currentIndex = 0;
+  score = 0;
+  answered = true;
+  updateTopBar();
+}
+
+function checkAnswer() {
+  if (answered) return;
+  const item = gameWords[currentIndex];
+  if (!item) return;
+
+  const userAnswer = translationInput.value.trim();
+  if (!userAnswer) {
+    feedback.className = 'feedback wrong';
+    feedback.innerText = 'Digite uma resposta primeiro.';
+    return;
   }
-  return normalizeText(removePinyinTones(pinyin));
-}
 
-function getDisplayAnswer(pinyin) {
-  if (typingAccentMode === 'with_accent') {
-    return pinyin;
+  const correct = isCorrectAnswer(userAnswer, item.acceptedAnswers);
+
+  if (correct) {
+    score++;
+    answered = true;
+    showCurrentAnswer(true, userAnswer);
+    currentIndex++;
+    updateTopBar();
+    return;
   }
-  return removePinyinTones(pinyin);
-}
 
-function checkTypingAnswer() {
-  if (typingIndex >= typingQuestions.length || typingAnswered || typingGameOver) return;
+  showCurrentAnswer(false, userAnswer);
 
-  const current = typingQuestions[typingIndex];
-  const userAnswer = normalizeText(typingInput.value);
-  const correctAnswer = getExpectedAnswer(current.pinyin);
-
-  typingAnswered = true;
-
-  if (userAnswer === correctAnswer) {
-    typingScore++;
-    document.getElementById('typingScore').innerText = `Acertos: ${typingScore}`;
-    typingFeedback.className = 'feedback correct';
-    typingFeedback.innerText = '✅ Correto!';
+  if (selectedErrorMode === 'reset') {
+    answerBox.innerHTML += '<br><br><strong>Regra do erro:</strong> progresso reiniciado.';
+    resetProgressAfterError();
   } else {
-    typingFeedback.className = 'feedback wrong';
-    typingFeedback.innerText = '❌ Você errou. O jogo vai reiniciar com nova ordem.';
-    typingAnswer.innerHTML = `Resposta correta: <strong>${getDisplayAnswer(current.pinyin)}</strong>`;
-    typingInput.disabled = true;
-    typingGameOver = true;
-
-    setTimeout(() => {
-      restartTypingGame();
-    }, 1800);
+    answered = true;
+    currentIndex++;
+    updateTopBar();
   }
 }
 
-function showTypingAnswer() {
-  if (typingIndex >= typingQuestions.length || typingGameOver) return;
-
-  const current = typingQuestions[typingIndex];
-  typingAnswered = true;
-  typingGameOver = true;
-  typingInput.disabled = true;
-
-  typingFeedback.className = 'feedback wrong';
-  typingFeedback.innerText = 'Resposta mostrada. O jogo vai reiniciar com nova ordem.';
-  typingAnswer.innerHTML = `Resposta correta: <strong>${getDisplayAnswer(current.pinyin)}</strong>`;
-
-  setTimeout(() => {
-    restartTypingGame();
-  }, 1800);
+function showAnswer() {
+  const item = gameWords[currentIndex];
+  if (!item) return;
+  showCurrentAnswer(false);
 }
 
-function nextTypingQuestion() {
-  if (typingGameOver) return;
-  if (!typingAnswered) return;
-  if (typingIndex >= typingQuestions.length) return;
+function nextQuestion() {
+  if (currentIndex >= gameWords.length) {
+    renderQuestion();
+    return;
+  }
 
-  typingIndex++;
-  loadTypingQuestion();
+  if (!answered) {
+    feedback.className = 'feedback wrong';
+    feedback.innerText = 'Responda ou mostre a resposta antes de passar.';
+    return;
+  }
+
+  renderQuestion();
 }
 
-function handleTypingEnter(event) {
+function handleEnter(event) {
   if (event.key === 'Enter') {
-    if (typingGameOver) return;
-
-    if (!typingAnswered) {
-      checkTypingAnswer();
+    if (answered) {
+      nextQuestion();
     } else {
-      nextTypingQuestion();
+      checkAnswer();
     }
   }
 }
 
-/* INICIALIZAÇÃO */
-updateSourceDisplays();
-updateLevelTexts();
+updateTopBar();
 </script>
-
 </body>
 </html>
