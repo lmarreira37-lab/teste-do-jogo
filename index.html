@@ -1,4 +1,3 @@
-
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8" />
@@ -216,6 +215,18 @@ button:hover {
   text-align: center;
 }
 
+.double-inputs {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 15px;
+}
+
+.double-inputs .quiz-input {
+  margin: 0;
+}
+
 .feedback {
   text-align: center;
   font-weight: bold;
@@ -361,6 +372,11 @@ button:hover {
       <p>Veja o ideograma e digite o pinyin correto</p>
     </div>
 
+    <div class="option-card" onclick="setGameSource('base'); openTranslationMenu();">
+      <h3>📝 Escrever a Tradução</h3>
+      <p>Veja o ideograma e escreva a tradução em português</p>
+    </div>
+
     <div class="option-card" onclick="openStudentBook()">
       <h3>📘 Livro do Aluno</h3>
       <p>Veja todos os caracteres e jogue com eles</p>
@@ -391,7 +407,9 @@ button:hover {
   <div class="book-actions">
     <button onclick="toggleStudentWordList()">Ver / Ocultar caracteres</button>
     <button class="success-btn" onclick="openMemoryMenuFromStudent()">Jogo da Memória</button>
-    <button onclick="openTypingMenuFromStudent()">Jogo de Escrita</button>
+    <button onclick="openTypingMenuFromStudent()">Jogo de Escrita do Pinyin</button>
+    <button onclick="openTranslationMenuFromStudent()">Jogo de Escrita da Tradução</button>
+    <button class="success-btn" onclick="openPinyinTranslationMenuFromStudent()">Pinyin + Tradução</button>
     <button class="secondary-btn" onclick="goToMainMenu()">Voltar</button>
   </div>
 
@@ -453,7 +471,7 @@ button:hover {
   </div>
 </div>
 
-<!-- MENU DIGITAÇÃO -->
+<!-- MENU DIGITAÇÃO PINYIN -->
 <div id="typingMenu" class="screen-card hidden">
   <h1>Escrever o Pinyin</h1>
   <p>Escolha como quer estudar e o nível</p>
@@ -525,6 +543,118 @@ button:hover {
   </div>
 </div>
 
+<!-- MENU DIGITAÇÃO TRADUÇÃO -->
+<div id="translationMenu" class="screen-card hidden">
+  <h1>Escrever a Tradução</h1>
+  <p>Escolha como quer estudar e o nível</p>
+
+  <div class="top-bar">
+    <div class="info-box" id="translationSourceDisplayMenu">Lista: Geral</div>
+  </div>
+
+  <div class="menu-section">
+    <h2>Modo de pergunta</h2>
+    <div class="option-group translation-mode-options">
+      <div class="option-card selected" onclick="selectTranslationMode('ideogram_only', this)">
+        <h3>Somente Ideograma</h3>
+        <p>Mostra só o 汉字</p>
+        <p>Ex.: <strong>爱</strong></p>
+      </div>
+
+      <div class="option-card" onclick="selectTranslationMode('ideogram_pinyin', this)">
+        <h3>Ideograma + Pinyin</h3>
+        <p>Mostra 汉字 e pinyin</p>
+        <p>Ex.: <strong>爱 / ài</strong></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="menu-section">
+    <h2>Nível</h2>
+    <div class="option-group translation-level-options">
+      <div class="option-card selected" onclick="selectTranslationLevel(5, 'Fácil demais', this)">
+        <h3>🟢 Fácil demais</h3>
+        <p>5 palavras</p>
+      </div>
+
+      <div class="option-card" onclick="selectTranslationLevel(10, 'Fácil', this)">
+        <h3>🟢 Fácil</h3>
+        <p>10 palavras</p>
+      </div>
+
+      <div class="option-card" onclick="selectTranslationLevel(20, 'Médio', this)">
+        <h3>🟡 Médio</h3>
+        <p>20 palavras</p>
+      </div>
+
+      <div class="option-card" onclick="selectTranslationLevel(30, 'Difícil', this)">
+        <h3>🔴 Difícil</h3>
+        <p>30 palavras</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="top-bar" style="margin-top:25px;">
+    <button class="secondary-btn" onclick="goBackFromTranslationMenu()">Voltar</button>
+    <button class="success-btn" onclick="startTranslationGame()">Começar</button>
+  </div>
+</div>
+
+<!-- MENU PINYIN + TRADUÇÃO -->
+<div id="pinyinTranslationMenu" class="screen-card hidden">
+  <h1>Escrever Pinyin + Tradução</h1>
+  <p>Veja o ideograma e escreva o pinyin e a tradução correta</p>
+
+  <div class="top-bar">
+    <div class="info-box" id="pinyinTranslationSourceDisplayMenu">Lista: Livro do Aluno</div>
+  </div>
+
+  <div class="menu-section">
+    <h2>Modo de resposta do pinyin</h2>
+    <div class="option-group pinyin-translation-accent-options">
+      <div class="option-card selected" onclick="selectPinyinTranslationAccentMode('with_accent', this)">
+        <h3>Com acento</h3>
+        <p>Ex.: <strong>ài</strong></p>
+      </div>
+
+      <div class="option-card" onclick="selectPinyinTranslationAccentMode('without_accent', this)">
+        <h3>Sem acento</h3>
+        <p>Ex.: <strong>ai</strong></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="menu-section">
+    <h2>Nível</h2>
+    <div class="option-group pinyin-translation-level-options">
+      <div class="option-card selected" onclick="selectPinyinTranslationLevel(10, 'Fácil demais', this)">
+        <h3>🟢 Fácil demais</h3>
+        <p>10 palavras</p>
+      </div>
+
+      <div class="option-card" onclick="selectPinyinTranslationLevel(28, 'Fácil', this)">
+        <h3>🟢 Fácil</h3>
+        <p>28 palavras</p>
+      </div>
+
+      <div class="option-card" onclick="selectPinyinTranslationLevel(56, 'Médio', this)">
+        <h3>🟡 Médio</h3>
+        <p>56 palavras</p>
+      </div>
+
+      <div class="option-card" onclick="selectPinyinTranslationLevel(83, 'Difícil', this)">
+        <h3>🔴 Difícil</h3>
+        <p>83 palavras</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="top-bar" style="margin-top:25px;">
+    <button class="secondary-btn" onclick="goBackFromPinyinTranslationMenu()">Voltar</button>
+    <button class="success-btn" onclick="startPinyinTranslationGame()">Começar</button>
+  </div>
+</div>
+
 <!-- JOGO DA MEMÓRIA -->
 <div id="memoryGameScreen" class="screen-card hidden">
   <h1>Jogo da Memória</h1>
@@ -545,7 +675,7 @@ button:hover {
   <div id="memoryBoard" class="grid"></div>
 </div>
 
-<!-- JOGO DE DIGITAR -->
+<!-- JOGO DE DIGITAR PINYIN -->
 <div id="typingGameScreen" class="screen-card hidden">
   <h1>Escrever o Pinyin</h1>
 
@@ -587,6 +717,104 @@ button:hover {
     </div>
 
     <div id="typingExtraProgress" class="progress-text"></div>
+  </div>
+</div>
+
+<!-- JOGO DE ESCREVER A TRADUÇÃO -->
+<div id="translationGameScreen" class="screen-card hidden">
+  <h1>Escrever a Tradução</h1>
+
+  <div class="top-bar">
+    <div class="info-box" id="translationScore">Acertos: 0</div>
+    <div class="info-box" id="translationProgress">Progresso: 0/0</div>
+    <div class="info-box" id="translationLevelDisplay">Nível: -</div>
+    <div class="info-box" id="translationModeDisplay">Modo: -</div>
+    <div class="info-box" id="translationSourceDisplayGame">Lista: -</div>
+  </div>
+
+  <div class="top-bar">
+    <button onclick="restartTranslationGame()">Reiniciar</button>
+    <button class="secondary-btn" onclick="backToTranslationMenu()">Voltar ao menu</button>
+  </div>
+
+  <div class="quiz-box">
+    <div id="translationQuizIdeogram" class="quiz-ideogram">爱</div>
+    <div id="translationQuizPinyin" class="quiz-translation hidden">ài</div>
+    <div class="quiz-instruction">Digite a tradução correta em português:</div>
+
+    <input
+      id="translationInput"
+      class="quiz-input"
+      type="text"
+      placeholder="Digite a tradução"
+      autocomplete="off"
+      onkeydown="handleTranslationEnter(event)"
+    />
+
+    <div id="translationFeedback" class="feedback"></div>
+    <div id="translationAnswer" class="answer-box"></div>
+
+    <div class="quiz-actions">
+      <button onclick="checkTranslationAnswer()">Responder</button>
+      <button class="secondary-btn" onclick="showTranslationAnswer()">Mostrar resposta</button>
+      <button class="success-btn" onclick="nextTranslationQuestion()">Próxima</button>
+    </div>
+
+    <div id="translationExtraProgress" class="progress-text"></div>
+  </div>
+</div>
+
+<!-- JOGO DE ESCREVER PINYIN + TRADUÇÃO -->
+<div id="pinyinTranslationGameScreen" class="screen-card hidden">
+  <h1>Escrever Pinyin + Tradução</h1>
+
+  <div class="top-bar">
+    <div class="info-box" id="pinyinTranslationScore">Acertos: 0</div>
+    <div class="info-box" id="pinyinTranslationProgress">Progresso: 0/0</div>
+    <div class="info-box" id="pinyinTranslationLevelDisplay">Nível: -</div>
+    <div class="info-box" id="pinyinTranslationAccentDisplay">Pinyin: -</div>
+    <div class="info-box" id="pinyinTranslationSourceDisplayGame">Lista: Livro do Aluno</div>
+  </div>
+
+  <div class="top-bar">
+    <button onclick="restartPinyinTranslationGame()">Reiniciar</button>
+    <button class="secondary-btn" onclick="backToPinyinTranslationMenu()">Voltar ao menu</button>
+  </div>
+
+  <div class="quiz-box">
+    <div id="pinyinTranslationQuizIdeogram" class="quiz-ideogram">爱</div>
+    <div class="quiz-instruction">Digite o pinyin e a tradução correta:</div>
+
+    <div class="double-inputs">
+      <input
+        id="pinyinTranslationPinyinInput"
+        class="quiz-input"
+        type="text"
+        placeholder="Digite o pinyin"
+        autocomplete="off"
+        onkeydown="handlePinyinTranslationEnter(event)"
+      />
+
+      <input
+        id="pinyinTranslationTranslationInput"
+        class="quiz-input"
+        type="text"
+        placeholder="Digite a tradução"
+        autocomplete="off"
+        onkeydown="handlePinyinTranslationEnter(event)"
+      />
+    </div>
+
+    <div id="pinyinTranslationFeedback" class="feedback"></div>
+    <div id="pinyinTranslationAnswer" class="answer-box"></div>
+
+    <div class="quiz-actions">
+      <button onclick="checkPinyinTranslationAnswer()">Responder</button>
+      <button class="secondary-btn" onclick="showPinyinTranslationAnswer()">Mostrar resposta</button>
+      <button class="success-btn" onclick="nextPinyinTranslationQuestion()">Próxima</button>
+    </div>
+
+    <div id="pinyinTranslationExtraProgress" class="progress-text"></div>
   </div>
 </div>
 
@@ -774,9 +1002,24 @@ function getTypingLevelLimit() {
   return 30;
 }
 
+function getTranslationLevelLimit() {
+  if (currentSource === 'student') {
+    if (translationLevelName === 'Fácil demais') return 10;
+    if (translationLevelName === 'Fácil') return 28;
+    if (translationLevelName === 'Médio') return 56;
+    return 83;
+  }
+
+  if (translationLevelName === 'Fácil demais') return 5;
+  if (translationLevelName === 'Fácil') return 10;
+  if (translationLevelName === 'Médio') return 20;
+  return 30;
+}
+
 function updateLevelTexts() {
   const memoryCards = document.querySelectorAll('.memory-level-options .option-card p');
   const typingCards = document.querySelectorAll('.typing-level-options .option-card p');
+  const translationCards = document.querySelectorAll('.translation-level-options .option-card p');
 
   if (currentSource === 'student') {
     memoryCards[0].innerText = '10 pares';
@@ -788,6 +1031,11 @@ function updateLevelTexts() {
     typingCards[1].innerText = '28 palavras';
     typingCards[2].innerText = '56 palavras';
     typingCards[3].innerText = '83 palavras';
+
+    translationCards[0].innerText = '10 palavras';
+    translationCards[1].innerText = '28 palavras';
+    translationCards[2].innerText = '56 palavras';
+    translationCards[3].innerText = '83 palavras';
   } else {
     memoryCards[0].innerText = '5 pares';
     memoryCards[1].innerText = '10 pares';
@@ -798,6 +1046,11 @@ function updateLevelTexts() {
     typingCards[1].innerText = '10 palavras';
     typingCards[2].innerText = '20 palavras';
     typingCards[3].innerText = '30 palavras';
+
+    translationCards[0].innerText = '5 palavras';
+    translationCards[1].innerText = '10 palavras';
+    translationCards[2].innerText = '20 palavras';
+    translationCards[3].innerText = '30 palavras';
   }
 }
 
@@ -805,8 +1058,12 @@ function updateSourceDisplays() {
   const sourceName = getCurrentSourceName();
   document.getElementById('memorySourceDisplayMenu').innerText = `Lista: ${sourceName}`;
   document.getElementById('typingSourceDisplayMenu').innerText = `Lista: ${sourceName}`;
+  document.getElementById('translationSourceDisplayMenu').innerText = `Lista: ${sourceName}`;
+  document.getElementById('pinyinTranslationSourceDisplayMenu').innerText = `Lista: ${sourceName}`;
   document.getElementById('memorySourceDisplayGame').innerText = `Lista: ${sourceName}`;
   document.getElementById('typingSourceDisplayGame').innerText = `Lista: ${sourceName}`;
+  document.getElementById('translationSourceDisplayGame').innerText = `Lista: ${sourceName}`;
+  document.getElementById('pinyinTranslationSourceDisplayGame').innerText = `Lista: ${sourceName}`;
 }
 
 /* TELAS */
@@ -814,16 +1071,24 @@ const mainMenu = document.getElementById('mainMenu');
 const studentBookScreen = document.getElementById('studentBookScreen');
 const memoryMenu = document.getElementById('memoryMenu');
 const typingMenu = document.getElementById('typingMenu');
+const translationMenu = document.getElementById('translationMenu');
 const memoryGameScreen = document.getElementById('memoryGameScreen');
 const typingGameScreen = document.getElementById('typingGameScreen');
+const translationGameScreen = document.getElementById('translationGameScreen');
+const pinyinTranslationMenu = document.getElementById('pinyinTranslationMenu');
+const pinyinTranslationGameScreen = document.getElementById('pinyinTranslationGameScreen');
 
 function hideAllScreens() {
   mainMenu.classList.add('hidden');
   studentBookScreen.classList.add('hidden');
   memoryMenu.classList.add('hidden');
   typingMenu.classList.add('hidden');
+  translationMenu.classList.add('hidden');
   memoryGameScreen.classList.add('hidden');
   typingGameScreen.classList.add('hidden');
+  translationGameScreen.classList.add('hidden');
+  pinyinTranslationMenu.classList.add('hidden');
+  pinyinTranslationGameScreen.classList.add('hidden');
 }
 
 function goToMainMenu() {
@@ -878,6 +1143,13 @@ function openTypingMenu() {
   typingMenu.classList.remove('hidden');
 }
 
+function openTranslationMenu() {
+  updateSourceDisplays();
+  updateLevelTexts();
+  hideAllScreens();
+  translationMenu.classList.remove('hidden');
+}
+
 function openMemoryMenuFromStudent() {
   setGameSource('student');
   openMemoryMenu();
@@ -887,6 +1159,27 @@ function openTypingMenuFromStudent() {
   setGameSource('student');
   openTypingMenu();
 }
+
+function openTranslationMenuFromStudent() {
+  setGameSource('student');
+  openTranslationMenu();
+}
+function openPinyinTranslationMenuFromStudent() {
+  setGameSource('student');
+  openPinyinTranslationMenu();
+}
+
+function openPinyinTranslationMenu() {
+  updateSourceDisplays();
+  hideAllScreens();
+  pinyinTranslationMenu.classList.remove('hidden');
+}
+
+function goBackFromPinyinTranslationMenu() {
+  hideAllScreens();
+  studentBookScreen.classList.remove('hidden');
+}
+
 
 function goBackFromMemoryMenu() {
   hideAllScreens();
@@ -898,6 +1191,15 @@ function goBackFromMemoryMenu() {
 }
 
 function goBackFromTypingMenu() {
+  hideAllScreens();
+  if (currentSource === 'student') {
+    studentBookScreen.classList.remove('hidden');
+  } else {
+    mainMenu.classList.remove('hidden');
+  }
+}
+
+function goBackFromTranslationMenu() {
   hideAllScreens();
   if (currentSource === 'student') {
     studentBookScreen.classList.remove('hidden');
@@ -1219,6 +1521,16 @@ function normalizeText(text) {
     .replace(/\s+/g, ' ');
 }
 
+function normalizeLooseText(text) {
+  return text
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[()¿?¡!.,;:/\\'"_-]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .toLowerCase();
+}
+
 function removePinyinTones(text) {
   const map = {
     'ā':'a','á':'a','ǎ':'a','à':'a',
@@ -1311,6 +1623,398 @@ function handleTypingEnter(event) {
       checkTypingAnswer();
     } else {
       nextTypingQuestion();
+    }
+  }
+}
+
+/* =========================
+   JOGO DE ESCREVER A TRADUÇÃO
+========================= */
+let translationLevel = 5;
+let translationLevelName = 'Fácil demais';
+let translationMode = 'ideogram_only';
+let translationModeName = 'Somente Ideograma';
+
+let translationQuestions = [];
+let translationIndex = 0;
+let translationScore = 0;
+let translationAnswered = false;
+let translationGameOver = false;
+
+const translationQuizIdeogram = document.getElementById('translationQuizIdeogram');
+const translationQuizPinyin = document.getElementById('translationQuizPinyin');
+const translationInput = document.getElementById('translationInput');
+const translationFeedback = document.getElementById('translationFeedback');
+const translationAnswer = document.getElementById('translationAnswer');
+
+function selectTranslationMode(mode, element) {
+  translationMode = mode;
+  translationModeName = mode === 'ideogram_only'
+    ? 'Somente Ideograma'
+    : 'Ideograma + Pinyin';
+
+  document.querySelectorAll('.translation-mode-options .option-card').forEach(card => {
+    card.classList.remove('selected');
+  });
+  element.classList.add('selected');
+}
+
+function selectTranslationLevel(level, levelName, element) {
+  translationLevel = level;
+  translationLevelName = levelName;
+
+  document.querySelectorAll('.translation-level-options .option-card').forEach(card => {
+    card.classList.remove('selected');
+  });
+  element.classList.add('selected');
+}
+
+function startTranslationGame() {
+  hideAllScreens();
+  translationGameScreen.classList.remove('hidden');
+  restartTranslationGame();
+}
+
+function backToTranslationMenu() {
+  hideAllScreens();
+  translationMenu.classList.remove('hidden');
+}
+
+function restartTranslationGame() {
+  const currentData = getCurrentData();
+  const levelLimit = Math.min(getTranslationLevelLimit(), currentData.length);
+
+  translationQuestions = shuffleArray([...currentData.slice(0, levelLimit)]);
+  translationIndex = 0;
+  translationScore = 0;
+  translationAnswered = false;
+  translationGameOver = false;
+
+  document.getElementById('translationLevelDisplay').innerText = `Nível: ${translationLevelName}`;
+  document.getElementById('translationModeDisplay').innerText = `Modo: ${translationModeName}`;
+  document.getElementById('translationScore').innerText = `Acertos: ${translationScore}`;
+  document.getElementById('translationSourceDisplayGame').innerText = `Lista: ${getCurrentSourceName()}`;
+
+  loadTranslationQuestion();
+}
+
+function loadTranslationQuestion() {
+  if (translationIndex >= translationQuestions.length) {
+    translationQuizIdeogram.innerText = '🎉';
+    translationQuizPinyin.classList.add('hidden');
+    translationQuizPinyin.innerText = '';
+    translationInput.value = '';
+    translationInput.disabled = true;
+    translationFeedback.className = 'feedback correct';
+    translationFeedback.innerText = `Parabéns! Você completou o nível ${translationLevelName} com ${translationScore} acertos.`;
+    translationAnswer.innerHTML = '';
+    document.getElementById('translationProgress').innerText = `Progresso: ${translationQuestions.length}/${translationQuestions.length}`;
+    document.getElementById('translationExtraProgress').innerText = 'Clique em Reiniciar para jogar novamente.';
+    translationGameOver = true;
+    return;
+  }
+
+  const current = translationQuestions[translationIndex];
+
+  translationQuizIdeogram.innerText = current.ideogram;
+
+  if (translationMode === 'ideogram_pinyin') {
+    translationQuizPinyin.classList.remove('hidden');
+    translationQuizPinyin.innerText = current.pinyin;
+  } else {
+    translationQuizPinyin.classList.add('hidden');
+    translationQuizPinyin.innerText = '';
+  }
+
+  translationInput.disabled = false;
+  translationInput.value = '';
+  translationInput.focus();
+
+  translationFeedback.innerText = '';
+  translationFeedback.className = 'feedback';
+  translationAnswer.innerHTML = '';
+  translationAnswered = false;
+
+  document.getElementById('translationProgress').innerText = `Progresso: ${translationIndex + 1}/${translationQuestions.length}`;
+  document.getElementById('translationExtraProgress').innerText = '';
+}
+
+function getAcceptedTranslations(translation) {
+  const normalizedFull = normalizeLooseText(translation);
+  const answers = new Set();
+
+  if (normalizedFull) answers.add(normalizedFull);
+
+  translation.split('/').forEach(part => {
+    const cleaned = normalizeLooseText(part);
+    if (cleaned) answers.add(cleaned);
+  });
+
+  translation.split(',').forEach(part => {
+    const cleaned = normalizeLooseText(part);
+    if (cleaned) answers.add(cleaned);
+  });
+
+  const withoutParentheses = normalizeLooseText(
+    translation.replace(/\([^)]*\)/g, ' ')
+  );
+  if (withoutParentheses) answers.add(withoutParentheses);
+
+  return [...answers];
+}
+
+function checkTranslationAnswer() {
+  if (translationIndex >= translationQuestions.length || translationAnswered || translationGameOver) return;
+
+  const current = translationQuestions[translationIndex];
+  const userAnswer = normalizeLooseText(translationInput.value);
+  const acceptedAnswers = getAcceptedTranslations(current.translation);
+
+  translationAnswered = true;
+
+  if (acceptedAnswers.includes(userAnswer)) {
+    translationScore++;
+    document.getElementById('translationScore').innerText = `Acertos: ${translationScore}`;
+    translationFeedback.className = 'feedback correct';
+    translationFeedback.innerText = '✅ Correto!';
+  } else {
+    translationFeedback.className = 'feedback wrong';
+    translationFeedback.innerText = '❌ Você errou. O jogo vai reiniciar com nova ordem.';
+    translationAnswer.innerHTML = `Resposta correta: <strong>${current.translation}</strong>`;
+    translationInput.disabled = true;
+    translationGameOver = true;
+
+    setTimeout(() => {
+      restartTranslationGame();
+    }, 1800);
+  }
+}
+
+function showTranslationAnswer() {
+  if (translationIndex >= translationQuestions.length || translationGameOver) return;
+
+  const current = translationQuestions[translationIndex];
+  translationAnswered = true;
+  translationGameOver = true;
+  translationInput.disabled = true;
+
+  translationFeedback.className = 'feedback wrong';
+  translationFeedback.innerText = 'Resposta mostrada. O jogo vai reiniciar com nova ordem.';
+  translationAnswer.innerHTML = `Resposta correta: <strong>${current.translation}</strong>`;
+
+  setTimeout(() => {
+    restartTranslationGame();
+  }, 1800);
+}
+
+function nextTranslationQuestion() {
+  if (translationGameOver) return;
+  if (!translationAnswered) return;
+  if (translationIndex >= translationQuestions.length) return;
+
+  translationIndex++;
+  loadTranslationQuestion();
+}
+
+function handleTranslationEnter(event) {
+  if (event.key === 'Enter') {
+    if (translationGameOver) return;
+
+    if (!translationAnswered) {
+      checkTranslationAnswer();
+    } else {
+      nextTranslationQuestion();
+    }
+  }
+}
+
+/* =========================
+   JOGO DE ESCREVER PINYIN + TRADUÇÃO
+========================= */
+let pinyinTranslationLevel = 10;
+let pinyinTranslationLevelName = 'Fácil demais';
+let pinyinTranslationAccentMode = 'with_accent';
+let pinyinTranslationAccentModeName = 'Com acento';
+
+let pinyinTranslationQuestions = [];
+let pinyinTranslationIndex = 0;
+let pinyinTranslationScore = 0;
+let pinyinTranslationAnswered = false;
+let pinyinTranslationGameOver = false;
+
+const pinyinTranslationQuizIdeogram = document.getElementById('pinyinTranslationQuizIdeogram');
+const pinyinTranslationPinyinInput = document.getElementById('pinyinTranslationPinyinInput');
+const pinyinTranslationTranslationInput = document.getElementById('pinyinTranslationTranslationInput');
+const pinyinTranslationFeedback = document.getElementById('pinyinTranslationFeedback');
+const pinyinTranslationAnswer = document.getElementById('pinyinTranslationAnswer');
+
+function selectPinyinTranslationAccentMode(mode, element) {
+  pinyinTranslationAccentMode = mode;
+  pinyinTranslationAccentModeName = mode === 'with_accent'
+    ? 'Com acento'
+    : 'Sem acento';
+
+  document.querySelectorAll('.pinyin-translation-accent-options .option-card').forEach(card => {
+    card.classList.remove('selected');
+  });
+  element.classList.add('selected');
+}
+
+function selectPinyinTranslationLevel(level, levelName, element) {
+  pinyinTranslationLevel = level;
+  pinyinTranslationLevelName = levelName;
+
+  document.querySelectorAll('.pinyin-translation-level-options .option-card').forEach(card => {
+    card.classList.remove('selected');
+  });
+  element.classList.add('selected');
+}
+
+function getPinyinTranslationExpectedAnswer(pinyin) {
+  if (pinyinTranslationAccentMode === 'with_accent') {
+    return normalizeText(pinyin);
+  }
+  return normalizeText(removePinyinTones(pinyin));
+}
+
+function getPinyinTranslationDisplayAnswer(pinyin) {
+  if (pinyinTranslationAccentMode === 'with_accent') {
+    return pinyin;
+  }
+  return removePinyinTones(pinyin);
+}
+
+function startPinyinTranslationGame() {
+  hideAllScreens();
+  pinyinTranslationGameScreen.classList.remove('hidden');
+  restartPinyinTranslationGame();
+}
+
+function backToPinyinTranslationMenu() {
+  hideAllScreens();
+  pinyinTranslationMenu.classList.remove('hidden');
+}
+
+function restartPinyinTranslationGame() {
+  setGameSource('student');
+
+  const currentData = getCurrentData();
+  const levelLimit = Math.min(pinyinTranslationLevel, currentData.length);
+
+  pinyinTranslationQuestions = shuffleArray([...currentData.slice(0, levelLimit)]);
+  pinyinTranslationIndex = 0;
+  pinyinTranslationScore = 0;
+  pinyinTranslationAnswered = false;
+  pinyinTranslationGameOver = false;
+
+  document.getElementById('pinyinTranslationLevelDisplay').innerText = `Nível: ${pinyinTranslationLevelName}`;
+  document.getElementById('pinyinTranslationAccentDisplay').innerText = `Pinyin: ${pinyinTranslationAccentModeName}`;
+  document.getElementById('pinyinTranslationScore').innerText = `Acertos: ${pinyinTranslationScore}`;
+  document.getElementById('pinyinTranslationSourceDisplayGame').innerText = `Lista: ${getCurrentSourceName()}`;
+
+  loadPinyinTranslationQuestion();
+}
+
+function loadPinyinTranslationQuestion() {
+  if (pinyinTranslationIndex >= pinyinTranslationQuestions.length) {
+    pinyinTranslationQuizIdeogram.innerText = '🎉';
+    pinyinTranslationPinyinInput.value = '';
+    pinyinTranslationTranslationInput.value = '';
+    pinyinTranslationPinyinInput.disabled = true;
+    pinyinTranslationTranslationInput.disabled = true;
+    pinyinTranslationFeedback.className = 'feedback correct';
+    pinyinTranslationFeedback.innerText = `Parabéns! Você completou o nível ${pinyinTranslationLevelName} com ${pinyinTranslationScore} acertos.`;
+    pinyinTranslationAnswer.innerHTML = '';
+    document.getElementById('pinyinTranslationProgress').innerText = `Progresso: ${pinyinTranslationQuestions.length}/${pinyinTranslationQuestions.length}`;
+    document.getElementById('pinyinTranslationExtraProgress').innerText = 'Clique em Reiniciar para jogar novamente.';
+    pinyinTranslationGameOver = true;
+    return;
+  }
+
+  const current = pinyinTranslationQuestions[pinyinTranslationIndex];
+
+  pinyinTranslationQuizIdeogram.innerText = current.ideogram;
+  pinyinTranslationPinyinInput.disabled = false;
+  pinyinTranslationTranslationInput.disabled = false;
+  pinyinTranslationPinyinInput.value = '';
+  pinyinTranslationTranslationInput.value = '';
+  pinyinTranslationPinyinInput.focus();
+
+  pinyinTranslationFeedback.innerText = '';
+  pinyinTranslationFeedback.className = 'feedback';
+  pinyinTranslationAnswer.innerHTML = '';
+  pinyinTranslationAnswered = false;
+
+  document.getElementById('pinyinTranslationProgress').innerText = `Progresso: ${pinyinTranslationIndex + 1}/${pinyinTranslationQuestions.length}`;
+  document.getElementById('pinyinTranslationExtraProgress').innerText = '';
+}
+
+
+function checkPinyinTranslationAnswer() {
+  if (pinyinTranslationIndex >= pinyinTranslationQuestions.length || pinyinTranslationAnswered || pinyinTranslationGameOver) return;
+
+  const current = pinyinTranslationQuestions[pinyinTranslationIndex];
+  const userPinyin = normalizeText(pinyinTranslationPinyinInput.value);
+  const correctPinyin = getPinyinTranslationExpectedAnswer(current.pinyin);
+  const userTranslation = normalizeLooseText(pinyinTranslationTranslationInput.value);
+  const acceptedTranslations = getAcceptedTranslations(current.translation);
+
+  pinyinTranslationAnswered = true;
+
+  if (userPinyin === correctPinyin && acceptedTranslations.includes(userTranslation)) {
+    pinyinTranslationScore++;
+    document.getElementById('pinyinTranslationScore').innerText = `Acertos: ${pinyinTranslationScore}`;
+    pinyinTranslationFeedback.className = 'feedback correct';
+    pinyinTranslationFeedback.innerText = '✅ Correto! Agora pode seguir para a próxima.';
+  } else {
+    pinyinTranslationFeedback.className = 'feedback wrong';
+    pinyinTranslationFeedback.innerText = '❌ Você errou. O jogo vai reiniciar com nova ordem.';
+    pinyinTranslationAnswer.innerHTML = `Resposta correta: <strong>${getPinyinTranslationDisplayAnswer(current.pinyin)}</strong> / <strong>${current.translation}</strong>`;
+    pinyinTranslationPinyinInput.disabled = true;
+    pinyinTranslationTranslationInput.disabled = true;
+    pinyinTranslationGameOver = true;
+
+    setTimeout(() => {
+      restartPinyinTranslationGame();
+    }, 1800);
+  }
+}
+
+function showPinyinTranslationAnswer() {
+  if (pinyinTranslationIndex >= pinyinTranslationQuestions.length || pinyinTranslationGameOver) return;
+
+  const current = pinyinTranslationQuestions[pinyinTranslationIndex];
+  pinyinTranslationAnswered = true;
+  pinyinTranslationGameOver = true;
+  pinyinTranslationPinyinInput.disabled = true;
+  pinyinTranslationTranslationInput.disabled = true;
+
+  pinyinTranslationFeedback.className = 'feedback wrong';
+  pinyinTranslationFeedback.innerText = 'Resposta mostrada. O jogo vai reiniciar com nova ordem.';
+  pinyinTranslationAnswer.innerHTML = `Resposta correta: <strong>${getPinyinTranslationDisplayAnswer(current.pinyin)}</strong> / <strong>${current.translation}</strong>`;
+
+  setTimeout(() => {
+    restartPinyinTranslationGame();
+  }, 1800);
+}
+
+function nextPinyinTranslationQuestion() {
+  if (pinyinTranslationGameOver) return;
+  if (!pinyinTranslationAnswered) return;
+  if (pinyinTranslationIndex >= pinyinTranslationQuestions.length) return;
+
+  pinyinTranslationIndex++;
+  loadPinyinTranslationQuestion();
+}
+
+function handlePinyinTranslationEnter(event) {
+  if (event.key === 'Enter') {
+    if (pinyinTranslationGameOver) return;
+
+    if (!pinyinTranslationAnswered) {
+      checkPinyinTranslationAnswer();
+    } else {
+      nextPinyinTranslationQuestion();
     }
   }
 }
